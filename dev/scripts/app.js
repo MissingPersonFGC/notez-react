@@ -6,6 +6,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Register from './Register';
 import Login from './Login';
+import FindNotes from './FindNotes';
 
 // Initialize Firebase
 const config = {
@@ -24,14 +25,21 @@ class App extends React.Component {
     super();
 
     this.state = {
-      user: null
+      user: null,
+      userName: '',
+      registerUserName: '',
+      registerPwd: '',
+      registerPwdVerify: '',
+      registerEmail: '',
+      loginEmail: '',
+      loginPwd: ''
     };
   }
   render() {
     return (
       <Router>
         <div>
-          {this.state.user === null ? <Route exact path="/" component={Header} /> : null}
+          {this.state.user === null ? <Route exact path="/" component={Header} /> : <Route exact path ="/" component="FindNotes" />}
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Footer />
