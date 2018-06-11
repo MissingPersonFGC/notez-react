@@ -1,0 +1,342 @@
+// Local Font Imports
+
+@font-face {
+  font-family: 'American Captain';
+  src: url('../../fonts/amercapt.otf') format('opentype');
+  src: url('../../fonts/amercapt.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Falling Sky';
+  src: url('../../fonts/FallingSky.otf') format('opentype');
+}
+
+// SCSS Imports
+
+@import 'variables';
+
+@import 'normalize';
+
+@import 'clearfix';
+
+@import 'borderbox';
+
+@import 'mixins';
+
+// Main Formatting
+
+body {
+  font-family: $font-main;
+  color: darken($color-secondary,20);
+  background: $color-main;
+  font-size: 16px;
+}
+
+header {
+  height: 65vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+
+  &.main-page-head {
+    @include header-bg('../../img/background.jpg');
+  }
+
+  h3 {
+    display: none;
+  }
+
+  .mobile-menu{
+    display: none;
+
+    a {
+      color: $color-main;
+    }
+  }
+
+  .login {
+    position: absolute;
+    top: 0;
+    right: 10%;
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+    z-index: 10;
+
+    .exit-button {
+      display: none;
+      font-size: 20px;
+
+      a {
+        background: $color-main;
+        color: $color-accent;
+
+        &:hover {
+          background: $color-main;
+          color: $color-accent;
+        }
+      }
+    }
+
+    a {
+      @include button($color-accent, $color-main, $font-second);
+      letter-spacing: 2px;
+    }
+
+    div {
+      padding-right: 10px;
+
+      input {
+        font-family: $font-main;
+        background: rgba(255,255,255,0.6);
+        border: 0;
+        padding: 5px;
+        color: darken($color-secondary,20);
+        margin-top: 5px;
+        width: 120px;
+      }
+
+      &:last-of-type {
+        padding-right: 0;
+      }
+    }
+  }
+
+
+  .wrapper {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    height: 65vh;
+
+    h1 {
+      font-family: $font-second;
+      text-transform: uppercase;
+      font-size: 3.75rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0 auto;
+      padding: 0;
+      transform: translate(-50%, -50%);
+      color: $color-accent;
+      letter-spacing: 5px;
+    }
+  }
+}
+
+main {
+  padding-bottom: 50px;
+
+  .notes-add {
+    text-align: center;
+    padding-top: 25px;
+
+    a {
+      @include button($color-accent, $color-main, $font-second);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+    }
+  }
+
+  .selection-head {
+    width: 80%;
+    max-width: 1250px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: 1.875rem;
+    }
+  }
+
+  .char-select, .game-select {
+    @extend .selection-head;
+    text-align: center;
+
+    a {
+      @include button($color-secondary, $color-main, $font-main);
+    }
+
+    select {
+      background: $color-secondary;
+      border: 0;
+      color: $color-main;
+      padding: 5px;
+      margin-right: 10px;
+      font-family: $font-main;
+    }
+
+    .opp-character {
+      margin-left: 10px;
+    }
+
+    .button-break {
+      display: none;
+    }
+  }
+}
+
+.char-notes {
+  width: 80%;
+  max-width: 1250px;
+  margin: 0 auto;
+
+  .button-break {
+    display: none;
+  }
+
+  ul {
+    padding-left: 0;
+  }
+
+  select {
+    background: $color-secondary;
+    border: 0;
+    color: $color-main;
+    padding: 5px;
+    margin-right: 10px;
+    font-family: $font-main;
+  }
+  .wrapper {
+    padding-top: 10px;
+    text-align: center;
+    a {
+      @include button($color-secondary, $color-main, $font-main);
+
+      &:last-of-type {
+        margin-left: 10px;
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+// Make the Character Notes and filter initially invisible, then make visible on click
+
+.char-notes ul li, .char-notes .wrapper {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s;
+  // Don't allow white space to push down the footer until notes are revealed
+  display: none;
+}
+
+.char-notes ul li {
+  list-style-type: none;
+  list-style-position: outside;
+
+  .note-type {
+    color: $color-accent;
+    text-transform: capitalize;
+  }
+}
+
+.char-notes ul li.show, .char-notes .wrapper.show {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.5s;
+  // Now it's okay for the list to push down the footer
+  display: block;
+}
+
+// Footer
+
+footer {
+  background: lighten($color-accent,10);
+  color: $color-main;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 0 auto;
+  width: 100%;
+
+  .wrapper {
+    width: 80%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+
+    a {
+      color: $color-main;
+      display: inline-block;
+      font-size: 17.5px;
+      padding: 2px;
+      transition: background 0.5s, color 0.5s;
+
+      &:hover {
+        background: $color-main;
+        color: lighten($color-accent,10);
+      }
+    }
+    .copyright {
+      padding-top: 2.5px;
+      width: 50%;
+    }
+    .social-media {
+      width: 50%;
+      text-align: right;
+      padding-right: 7.5%;
+    }
+  }
+}
+
+.add-notes-popup {
+  text-align: center;
+  padding: 20px;
+  padding-top: 40px;
+  margin: 0 auto;
+  display: none;
+  border: 1px $color-accent solid;
+  border-radius: 5px;
+  box-shadow: 0 0 15px #000;
+
+  &.make-visible {
+    display: block;
+    z-index: 30;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: $color-main;
+  }
+
+  .add-exit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    a {
+      color: $color-accent;
+    }
+  }
+
+  h4 {
+    text-align: left;
+  }
+  select {
+    background: $color-accent;
+    border: 0;
+    color: $color-main;
+    padding: 5px;
+    margin-right: 10px;
+    font-family: $font-main;
+  }
+
+  textarea {
+    background: $color-main;
+    border: 1px $color-accent solid;
+    font-family: $font-main;
+    color: $color-accent;
+  }
+
+  button {
+    @include button($color-accent, $color-main, $font-main);
+    border: 0;
+    margin-top: 20px;
+  }
+}
+
+@import 'media';

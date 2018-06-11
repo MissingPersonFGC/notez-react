@@ -1,0 +1,206 @@
+@media (max-width: 414px) {
+  header {
+    height: auto;
+    width: 100%;
+
+    &.main-page-head {
+      background: lighten($color-accent, 10);
+      z-index: 10;
+    }
+
+    .login {
+      display: none;
+      flex-direction: column;
+      width: 95%;
+      justify-content: space-around;
+      align-items: center;
+      position: absolute;
+      z-index: 9;
+      top: 12.5px;
+      left: 2.5%;
+      border: 1px $color-accent solid;
+      border-radius: 5px;
+      padding-bottom: 75px;
+      box-shadow: 0 0 15px #000;
+
+      .username, .password, .login-button, .register-button {
+        margin-right: 0;
+        padding-right: 0;
+        margin-bottom: 15px;
+
+        input {
+          border: 1px $color-accent solid;
+          border-radius: 3px;
+        }
+
+        a {
+          font-size: 0.8rem;
+          padding: 5px 15px;
+        }
+      }
+
+      .username {
+        margin-top: 50px;
+      }
+
+      .exit-button {
+        position: absolute;
+        top: 12.5px;
+        right: 5px;
+        z-index: 10;
+        width: auto;
+        height: auto;
+        display: inline-block;
+
+        a {
+          padding: 0;
+          font-size: 1.675rem;
+        }
+      }
+    }
+
+    .responsive {
+      display: block;
+      background: $color-main;
+    }
+
+    h3 {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 5%;
+      font-size: 25px;
+      color: $color-accent;
+      font-family: $font-second;
+      margin-top: 14.5px;
+      text-align: left;
+      max-width: 80%;
+      letter-spacing: 2px;
+    }
+
+    .mobile-menu {
+      display: block;
+      position: absolute;
+      top: 13px;
+      right: 5%;
+      font-size: 20px;
+
+      a {
+        color: $color-accent;
+      }
+    }
+
+    .wrapper {
+      display: none;
+    }
+  }
+
+  main {
+    margin-top: 30px;
+    padding-bottom: 20px;
+
+    .selection-head {
+
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+
+    .notes-add {
+
+      a {
+        font-size: 0.8rem;
+        margin-top: 10px;
+        margin-left: 5px;
+        padding: 5px 15px;
+      }
+    }
+
+    .char-select, .game-select, .char-notes,  {
+      font-size:  0.72rem;
+
+      select {
+        font-size: 0.72rem;
+        margin-right: 5px;
+        padding: 1px;
+      }
+
+      .opp-character {
+        margin-left: 5px;
+        margin-right: 0;
+      }
+
+      .note-filter {
+        margin: 0;
+      }
+
+      a {
+        margin-top: 10px;
+        margin-left: 5px;
+        padding: 5px 15px;
+
+        &:first-of-type {
+          margin-left: 0px;
+        }
+
+        &.desktop {
+          display: none;
+        }
+      }
+
+      .button-break {
+        display: block;
+
+        a {
+          padding: 5px 15px;
+        }
+      }
+    }
+  }
+
+  footer {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 0.6rem;
+
+    .wrapper {
+      margin-left: 5%;
+      margin-right: 5%;
+      width: 100%;
+
+      .copyright {
+        width: 50%;
+        text-align: left;
+      }
+
+      .social-media {
+        width: 50%;
+        a {
+          font-size: 0.6rem;
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  .add-notes-popup {
+    select {
+      font-size: 0.72rem;
+      margin-right: 5px;
+      padding: 1px;
+    }
+
+    button {
+      padding: 5px 15px;
+    }
+
+    textarea {
+      width: 250px;
+      font-size: 0.72rem;
+    }
+
+    h4 {
+      font-size: 0.94rem;
+    }
+  }
+}

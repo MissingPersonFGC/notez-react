@@ -1,0 +1,9 @@
+/*Adding Clearfix*/
+.clearfix {
+  overflow: auto;
+}
+
+.clearfix:after {
+  visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0;
+}
+/*End Clearfix*/

@@ -1,7 +1,6 @@
 {
-  "name": "react-boilerplate",
+  "name": "notez-react",
   "version": "1.0.0",
-  "description": "",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -29,7 +28,17 @@
   },
   "dependencies": {
     "connect-history-api-fallback": "^1.5.0",
+    "firebase": "^5.0.4",
     "node-sass": "^4.7.1",
     "react-router-dom": "^4.2.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MissingPersonFGC/notez-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MissingPersonFGC/notez-react/issues"
+  },
+  "homepage": "https://github.com/MissingPersonFGC/notez-react#readme",
+  "description": ""
 }
