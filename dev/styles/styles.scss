@@ -32,6 +32,23 @@ body {
   font-size: 16px;
 }
 
+.user-header {
+  width: 80%;
+  margin: 0 auto;
+  
+  h1 {
+    color: $color-accent;
+    font-family: $font-second;
+    font-size: 4rem;
+
+
+    .smaller-heading {
+      font-family: $font-main;
+      font-size: 1.8rem;
+    }
+  }
+}
+
 header {
   height: 93.5vh;
   width: 100%;
