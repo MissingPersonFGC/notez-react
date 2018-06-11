@@ -35,7 +35,7 @@ body {
 .user-header {
   width: 80%;
   margin: 0 auto;
-  
+
   h1 {
     color: $color-accent;
     font-family: $font-second;
@@ -45,7 +45,20 @@ body {
     .smaller-heading {
       font-family: $font-main;
       font-size: 1.8rem;
+      color: $color-secondary;
     }
+  }
+}
+
+.user-form {
+  input[type=submit] {
+    @include button($color-accent, $color-main, $font-second);
+    border: none;
+  }
+
+  a {
+    @include button($color-secondary, $color-main, $font-main);
+    text-transform: capitalize;
   }
 }
 
