@@ -32,14 +32,33 @@ class App extends React.Component {
       registerPwdVerify: '',
       registerEmail: '',
       loginEmail: '',
-      loginPwd: ''
+      loginPwd: '',
+      loggedIn: false
     };
   }
+
+  componentDidMount() {
+    // Checks to see if the user has already logged in
+    firebase
+      .auth()
+      .onAuthStateChanged(user => {
+        if (user) {
+          this.setState({
+            loggedIn: true
+          });
+        } else {
+          this.setState({
+            loggedIn: false
+          });
+        }
+      });
+  }
+
   render() {
     return (
       <Router>
         <div>
-          {this.state.user === null ? <Route exact path="/" component={Header} /> : <Route exact path ="/" component="FindNotes" />}
+          {this.state.loggedIn === false ? <Route exact path="/" component={Header} /> : <Route exact path ="/" component={FindNotes} />}
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Footer />
