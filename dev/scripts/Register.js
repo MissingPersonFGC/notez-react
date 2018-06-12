@@ -17,6 +17,8 @@ class Register extends React.Component {
             registerPwd: '',
             registerPwdVerify: '',
             registerEmail: '',
+            characterNotes: [],
+            playerNotes: []
         }
 
         this.doRegister = this.doRegister.bind(this);
@@ -53,11 +55,21 @@ class Register extends React.Component {
                             this.setState({
                                 user
                             });
-                            const dbRef = firebase.database().ref(`users/${this.state.registerUserName}`).push(user);;
+                            const dbRef = firebase.database().ref(`${this.state.registerUserName}`).push(user);
                         })
                         .catch((error) => console.log(error.code, error.message));
 
+                        let dbRefUserId = '';
+
                         firebase.auth().set;
+
+                        firebase.auth().onAuthStateChanged(user => {
+                            dbRefUserId = user.uid;
+                            
+                            const dbRefUser = firebase.database().ref(`users/${dbRefUserId}`);
+
+                            dbRefUser.set({userName: userName});
+                        });
 
                         this.setState({
                             registerEmail: '',

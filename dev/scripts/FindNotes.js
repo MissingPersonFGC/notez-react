@@ -7,9 +7,33 @@ class FindNotes extends React.Component {
     constructor() {
         super();
         this.state = {
-            loggedIn: true
+            loggedIn: true,
+            userName: '',
+            userId: '',
         };
         this.doLogout = this.doLogout.bind(this);
+    }
+
+    componentDidMount() {
+        let userIdFromDB = '';
+        firebase.auth().onAuthStateChanged(user => {
+            this.setState({
+                userId: user.uid
+            });
+        });
+        this.dbRefUser = firebase.database().ref(`users/${this.state.userId}`);
+
+        this.dbRefUser.on("value", snapshot => {
+            const value = snapshot.val();
+            for (let user in value) {
+                const getUserName = value[user];
+                for (let userName in getUserName) {
+                    this.setState({
+                        userName: getUserName[userName]
+                    });
+                }
+            }
+        });
     }
 
     doLogout(e) {
@@ -28,7 +52,7 @@ class FindNotes extends React.Component {
                         <h1>NoteZ</h1>
                     </div>
                     <div className="notes-header__user">
-                        <p>Welcome, username!</p>
+                        <p>Welcome, {this.state.userName}!</p>
                         <div className="notes-header__user__button">
                             <button onClick={this.doLogout}>Sign-out</button>
                         </div>
