@@ -48,11 +48,8 @@ class FindNotes extends React.Component {
         });
 
         this.dbRefGames = firebase.database().ref(`gameData/`);
-        this.dbRefPunish = firebase.database().ref(`punishData/`);
-        this.dbRefGameNotes = firebase.database().ref(`userData/${this.state.userName}/gameNotes/`);
 
         this.dbRefGames.on("value", snapshot => {
-            console.log(snapshot.val());
             this.setState({
                 gameData: snapshot.val()
             });
@@ -108,7 +105,7 @@ class FindNotes extends React.Component {
                     </div>
                 </div>
                 <main>
-                    <section class="selection-head">
+                    <section className="selection-head">
                         <h2>Select your game:</h2>
                     </section>
                     <section className="game-select">
@@ -119,29 +116,29 @@ class FindNotes extends React.Component {
                             })}
                         </select>
                     </section>
-                    <section class="selection-head">
+                    <section className="selection-head">
                         <h2>Select your matchup:</h2>
                     </section>
-                    <section class="char-select clearfix">
-                        <select class="your-character" name="your-character" defaultValue="" onChange={this.setYourChar}>
+                    <section className="char-select clearfix">
+                        <select className="your-character" name="your-character" defaultValue="" onChange={this.setYourChar}>
                             <option value="" disabled>--Your character--</option>
                             {this.state.characterData.map((character, index) => {
                                 return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
                             })}
                         </select>
                         vs.
-                        <select class="opp-character" name="opp-character" defaultValue="" onChange={this.setOppChar}>
+                        <select className="opp-character" name="opp-character" defaultValue="" onChange={this.setOppChar}>
                             <option value="" disabled>--Their character--</option>
                             {this.state.characterData.map((character, index) => {
                                 return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
                             })}
                         </select>
 
-                        <a href="#stick" class="button show-notes desktop"><i class="fas fa-eye"></i> Show Notes</a>
+                        <a href="#stick" className="button show-notes desktop"><i className="fas fa-eye"></i> Show Notes</a>
 
                         {/* Create separate button that will display on mobile devices. */}
-                        <div class="button-break">
-                            <a href="#stick" class="button show-notes mobile"><i class="fas fa-eye"></i> Show Notes</a>
+                        <div className="button-break">
+                            <a href="#stick" className="button show-notes mobile"><i className="fas fa-eye"></i> Show Notes</a>
                         </div>
                     </section>
                 </main>
