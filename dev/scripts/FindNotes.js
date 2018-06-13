@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom"
 import firebase from 'firebase';
 import PopulateGames from './PopulateGames';
 import PopulateCharacters from './PopulateCharacters';
+import PopulateNotes from './PopulateNotes';
 
 class FindNotes extends React.Component {
     constructor() {
@@ -18,12 +19,14 @@ class FindNotes extends React.Component {
             punishData: [],
             selectedGame: '',
             yourCharacter: '',
-            oppCharacter: ''
+            oppCharacter: '',
+            noteClass: ''
         };
         this.doLogout = this.doLogout.bind(this);
         this.pullCharacters = this.pullCharacters.bind(this);
         this.setYourChar = this.setYourChar.bind(this);
         this.setOppChar = this.setOppChar.bind(this);
+        this.getGameNotes = this.getGameNotes.bind(this);
     }
 
     componentDidMount() {
@@ -69,6 +72,7 @@ class FindNotes extends React.Component {
         this.dbRefCharacters = firebase.database().ref(`characterData/${selectedGame}/`);
         this.dbRefCharacters.on("value", snapshot => {
             this.setState({
+                selectedGame: selectedGame,
                 characterData: snapshot.val()
             });
         });
@@ -85,6 +89,22 @@ class FindNotes extends React.Component {
         const oppChar = e.target.value;
         this.setState({
             oppCharacter: oppChar
+        });
+    }
+
+    getGameNotes(e) {
+        e.preventDefault();
+        const yourGame = this.state.selectedGame;
+        const yourChar = this.state.yourCharacter;
+        const oppChar = this.state.oppCharacter;
+        const you = this.state.userName;
+
+        this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
+        this.dbRefGameNotes.on("value", snapshot => {
+            this.setState({
+                gameNotes: snapshot.val(),
+                noteClass: `${yourChar}-v-${oppChar}`
+            })
         });
     }
     
@@ -134,11 +154,34 @@ class FindNotes extends React.Component {
                             })}
                         </select>
 
-                        <a href="#stick" className="button show-notes desktop"><i className="fas fa-eye"></i> Show Notes</a>
+                        <a href="#stick" className="button show-notes desktop" onClick={this.getGameNotes}><i className="fas fa-eye"></i> Show Notes</a>
 
                         {/* Create separate button that will display on mobile devices. */}
                         <div className="button-break">
                             <a href="#stick" className="button show-notes mobile"><i className="fas fa-eye"></i> Show Notes</a>
+                        </div>
+                    </section>
+                    <section className="char-notes">
+                        <div className="wrapper">
+                        Filter by:
+                        <select className="note-filter" name="note-filter">
+                            <option value="" disabled selected>--Filter by--</option>
+                        </select>
+                        <a href="#stick" className="button filter desktop"><i class="fas fa-filter"></i> Filter</a>
+                        <a href="#stick" className="button show-all desktop"><i class="fas fa-sync-alt"></i> Show All</a>
+
+                        {/* Create separate buttons that will display on mobile devices. */}
+                        <div className="button-break">
+                            <a href="#stick" className="button filter mobile"><i class="fas fa-filter"></i> Filter</a>
+                            <a href="#stick" className="button show-all mobile"><i class="fas fa-sync-alt"></i> Show All</a>
+                        </div>
+                        </div>
+                        <div className="notes" id="stick">
+                        <ul>
+                            {this.state.gameNotes.map((note, index) => {
+                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} noteClass={this.state.noteClass} key={index} />
+                            })}
+                        </ul>
                         </div>
                     </section>
                 </main>
