@@ -32,8 +32,7 @@ class FindNotes extends React.Component {
         this.filterNotes = this.filterNotes.bind(this);
     }
 
-    componentDidMount() {
-        let userIdFromDB = '';
+    componentDidMount() {;
         firebase.auth().onAuthStateChanged(user => {
             this.setState({
                 userId: user.uid
@@ -115,7 +114,7 @@ class FindNotes extends React.Component {
                     filterData.push(filter);
                 })
             });
-        })
+        });
         this.dbRefGameNotes.on("value", snapshot => {
             this.setState({
                 gameNotes: snapshot.val(),
@@ -192,11 +191,11 @@ class FindNotes extends React.Component {
                             })}
                         </select>
 
-                        <a href="#stick" className="button show-notes desktop" onClick={this.getGameNotes}><i className="fas fa-eye"></i> Show Notes</a>
+                        <a href="" className="button show-notes desktop" onClick={this.getGameNotes}><i className="fas fa-eye"></i> Show Notes</a>
 
                         {/* Create separate button that will display on mobile devices. */}
                         <div className="button-break">
-                            <a href="#stick" className="button show-notes mobile" onClick={this.getGameNotes}><i className="fas fa-eye"></i> Show Notes</a>
+                            <a href="" className="button show-notes mobile" onClick={this.getGameNotes}><i className="fas fa-eye"></i> Show Notes</a>
                         </div>
                     </section>
                     <section className="char-notes">
@@ -208,22 +207,27 @@ class FindNotes extends React.Component {
                                 return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                             })}
                         </select>
-                        <a href="#stick" className="button filter desktop" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
-                        <a href="#stick" className="button show-all desktop" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
+                        <a href="" className="button filter desktop" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
+                        <a href="" className="button show-all desktop" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
 
                         {/* Create separate buttons that will display on mobile devices. */}
                         <div className="button-break">
-                            <a href="#stick" className="button filter mobile" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
-                            <a href="#stick" className="button show-all mobile" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
+                            <a href="" className="button filter mobile" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
+                            <a href="" className="button show-all mobile" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                         </div>
                         </div>
-                        <div className="notes" id="stick">
-                        <ul>
-                            {this.state.gameNotes.map((note, index) => {
-                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} noteClass={this.state.noteClass} key={index} />
-                            })}
-                        </ul>
+                        <div className="notes">
+                            <ul>
+                                {this.state.gameNotes !== null ? 
+                                    this.state.gameNotes.map((note, index) => {
+                                        return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} noteClass={this.state.noteClass} key={index} />
+                                    }) 
+                                : <li>No notes be here!</li>}
+                            </ul>
                         </div>
+                    </section>
+                    <section className="notes-add">
+                        <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes</Link>
                     </section>
                 </main>
             </div>
