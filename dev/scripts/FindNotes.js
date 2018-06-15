@@ -116,8 +116,14 @@ class FindNotes extends React.Component {
             });
         });
         this.dbRefGameNotes.on("value", snapshot => {
+            const unparsedNotes = snapshot.val();
+            const parsedNotes = [];
+
+            for (let item in unparsedNotes) {
+                parsedNotes.push(unparsedNotes[item]);
+            }
             this.setState({
-                gameNotes: snapshot.val(),
+                gameNotes: parsedNotes,
                 punishData: filterData
             });
         });
