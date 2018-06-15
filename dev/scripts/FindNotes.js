@@ -106,6 +106,8 @@ class FindNotes extends React.Component {
                 noteClass: `${yourChar}-v-${oppChar}`
             })
         });
+
+        console.log(this.state.noteClass);
     }
     
     render() {

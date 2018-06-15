@@ -277,11 +277,8 @@ main {
 // Make the Character Notes and filter initially invisible, then make visible on click
 
 .char-notes ul li, .char-notes .wrapper {
-  visibility: hidden;
-  opacity: 0;
   transition: opacity 0.5s;
   // Don't allow white space to push down the footer until notes are revealed
-  display: none;
 }
 
 .char-notes ul li {
@@ -290,7 +287,6 @@ main {
 
   .note-type {
     color: $color-accent;
-    text-transform: capitalize;
   }
 }
 
