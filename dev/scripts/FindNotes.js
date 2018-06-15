@@ -21,7 +21,6 @@ class FindNotes extends React.Component {
             selectedGame: '',
             yourCharacter: '',
             oppCharacter: '',
-            noteClass: '',
             chosenFilter: ''
         };
         this.doLogout = this.doLogout.bind(this);
@@ -30,6 +29,7 @@ class FindNotes extends React.Component {
         this.setOppChar = this.setOppChar.bind(this);
         this.getGameNotes = this.getGameNotes.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
+        this.filterNotes = this.filterNotes.bind(this);
     }
 
     componentDidMount() {
@@ -119,14 +119,31 @@ class FindNotes extends React.Component {
         this.dbRefGameNotes.on("value", snapshot => {
             this.setState({
                 gameNotes: snapshot.val(),
-                noteClass: `${yourChar}-v-${oppChar}`,
                 punishData: filterData
             });
         });
     }
 
     changeFilter(e) {
+        const selectedFilter = e.target.value;
+        this.setState({
+            chosenFilter: selectedFilter
+        });
+    }
 
+    filterNotes(e) {
+        e.preventDefault();
+        const wholeNotes = this.state.gameNotes;
+        const selectedFilter = this.state.chosenFilter;
+        const reducedNotes = [];
+        wholeNotes.forEach((note) => {
+            if (note.noteType === selectedFilter) {
+                reducedNotes.push(note);
+            }
+        });
+        this.setState({
+            gameNotes: reducedNotes
+        });
     }
     
     render() {
@@ -179,7 +196,7 @@ class FindNotes extends React.Component {
 
                         {/* Create separate button that will display on mobile devices. */}
                         <div className="button-break">
-                            <a href="#stick" className="button show-notes mobile"><i className="fas fa-eye"></i> Show Notes</a>
+                            <a href="#stick" className="button show-notes mobile" onClick={this.getGameNotes}><i className="fas fa-eye"></i> Show Notes</a>
                         </div>
                     </section>
                     <section className="char-notes">
@@ -191,13 +208,13 @@ class FindNotes extends React.Component {
                                 return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                             })}
                         </select>
-                        <a href="#stick" className="button filter desktop"><i className="fas fa-filter"></i> Filter</a>
-                        <a href="#stick" className="button show-all desktop"><i className="fas fa-sync-alt"></i> Show All</a>
+                        <a href="#stick" className="button filter desktop" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
+                        <a href="#stick" className="button show-all desktop" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
 
                         {/* Create separate buttons that will display on mobile devices. */}
                         <div className="button-break">
-                            <a href="#stick" className="button filter mobile"><i className="fas fa-filter"></i> Filter</a>
-                            <a href="#stick" className="button show-all mobile"><i className="fas fa-sync-alt"></i> Show All</a>
+                            <a href="#stick" className="button filter mobile" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
+                            <a href="#stick" className="button show-all mobile" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                         </div>
                         </div>
                         <div className="notes" id="stick">
