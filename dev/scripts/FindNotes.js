@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import PopulateGames from './PopulateGames';
 import PopulateCharacters from './PopulateCharacters';
 import PopulateNotes from './PopulateNotes';
+import PopulateFilters from './PopulateFilters';
 
 class FindNotes extends React.Component {
     constructor() {
@@ -20,13 +21,15 @@ class FindNotes extends React.Component {
             selectedGame: '',
             yourCharacter: '',
             oppCharacter: '',
-            noteClass: ''
+            noteClass: '',
+            chosenFilter: ''
         };
         this.doLogout = this.doLogout.bind(this);
         this.pullCharacters = this.pullCharacters.bind(this);
         this.setYourChar = this.setYourChar.bind(this);
         this.setOppChar = this.setOppChar.bind(this);
         this.getGameNotes = this.getGameNotes.bind(this);
+        this.changeFilter = this.changeFilter.bind(this);
     }
 
     componentDidMount() {
@@ -94,20 +97,36 @@ class FindNotes extends React.Component {
 
     getGameNotes(e) {
         e.preventDefault();
+        const filterData = [];
         const yourGame = this.state.selectedGame;
         const yourChar = this.state.yourCharacter;
         const oppChar = this.state.oppCharacter;
         const you = this.state.userName;
 
         this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
+        this.dbRefFilterGameSpecific = firebase.database().ref(`punishData/${yourGame}`);
+        this.dbRefFilterGlobal = firebase.database().ref(`punishData/global/`);
+        this.dbRefFilterGlobal.on("value", snapshot => {
+            snapshot.val().forEach((filter) => {
+                filterData.push(filter);
+            });
+            this.dbRefFilterGameSpecific.on("value", snapshot2 => {
+                snapshot2.val().forEach((filter) => {
+                    filterData.push(filter);
+                })
+            });
+        })
         this.dbRefGameNotes.on("value", snapshot => {
             this.setState({
                 gameNotes: snapshot.val(),
-                noteClass: `${yourChar}-v-${oppChar}`
-            })
+                noteClass: `${yourChar}-v-${oppChar}`,
+                punishData: filterData
+            });
         });
+    }
 
-        console.log(this.state.noteClass);
+    changeFilter(e) {
+
     }
     
     render() {
@@ -166,16 +185,19 @@ class FindNotes extends React.Component {
                     <section className="char-notes">
                         <div className="wrapper">
                         Filter by:
-                        <select className="note-filter" name="note-filter">
-                            <option value="" disabled selected>--Filter by--</option>
+                        <select className="note-filter" name="note-filter" onChange={this.changeFilter} defaultValue="">
+                            <option value="" disabled>--Filter by--</option>
+                            {this.state.punishData.map((filter, index) => {
+                                return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                            })}
                         </select>
-                        <a href="#stick" className="button filter desktop"><i class="fas fa-filter"></i> Filter</a>
-                        <a href="#stick" className="button show-all desktop"><i class="fas fa-sync-alt"></i> Show All</a>
+                        <a href="#stick" className="button filter desktop"><i className="fas fa-filter"></i> Filter</a>
+                        <a href="#stick" className="button show-all desktop"><i className="fas fa-sync-alt"></i> Show All</a>
 
                         {/* Create separate buttons that will display on mobile devices. */}
                         <div className="button-break">
-                            <a href="#stick" className="button filter mobile"><i class="fas fa-filter"></i> Filter</a>
-                            <a href="#stick" className="button show-all mobile"><i class="fas fa-sync-alt"></i> Show All</a>
+                            <a href="#stick" className="button filter mobile"><i className="fas fa-filter"></i> Filter</a>
+                            <a href="#stick" className="button show-all mobile"><i className="fas fa-sync-alt"></i> Show All</a>
                         </div>
                         </div>
                         <div className="notes" id="stick">
