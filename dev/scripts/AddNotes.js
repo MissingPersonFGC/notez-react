@@ -79,9 +79,11 @@ class AddNotes extends React.Component {
         });
         this.dbRefFilterGameSpecific.on("value", snapshot => {
             const filters = snapshot.val();
-            filters.forEach((filter) => {
-                yourFilters.push(filter);
-            });
+            if (filters !== null) {
+                filters.forEach((filter) => {
+                    yourFilters.push(filter);
+                });
+            }
             this.setState({
                 filterData: yourFilters,
                 yourGame: selectedGame,
@@ -141,11 +143,10 @@ class AddNotes extends React.Component {
         this.dbRefNotesLocation = firebase.database().ref(`userData/${user}/gameNotes/${game}/${you}/${opponent}/`);
         
         this.dbRefNotesLocation.push(noteFormatted);
-    }
 
-    postActualNotes(user, game, you, opponent, noteFormatted) {
-        this.dbRefNotePosition = firebase.database().ref(`userData/${user}/gameNotes/${game}/${you}/${opponent}/${this.state.length}`);
-        
+        this.setState({
+            noteContent: ''
+        })
     }
 
     render() {
@@ -190,7 +191,7 @@ class AddNotes extends React.Component {
                 </div>
                 <div class="add-notes-note">
                     <h4>Note:</h4>
-                    <textarea name="note" rows="2" cols="50" onChange={this.setNote}></textarea>
+                    <textarea name="note" rows="2" cols="50" onChange={this.setNote} value={this.state.noteContent}></textarea>
                 </div>
                 <div class="add-notes-submit">
                     <a href="" className="notes-add-submit button" onClick={this.addNote}><i class="far fa-plus-square"></i> Add</a>
