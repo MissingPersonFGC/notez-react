@@ -40,6 +40,8 @@ class FindNotes extends React.Component {
         });
         this.dbRefUser = firebase.database().ref(`users/${this.state.userId}`);
 
+        const availableGames = [];
+
         this.dbRefUser.on("value", snapshot => {
             const value = snapshot.val();
             for (let user in value) {
@@ -48,17 +50,48 @@ class FindNotes extends React.Component {
                     this.setState({
                         userName: getUserName[userName]
                     });
+
+                    this.dbRefAvailableGames = firebase.database().ref(`userData/${getUserName[userName]}/gameNotes/`);
+
+                    this.dbRefAvailableGames.on("value", snapshot => {
+                        const games = snapshot.val();
+
+                        for (let value in games) {
+                            availableGamesInNotes.push(value);
+                        }
+
+                        availableGamesInNotes.forEach((game1) => {
+                            allGames.forEach((game2) => {
+                                if (game1 === game2.gameShorthand) {
+                                    availableGames.push(game2);
+                                }
+                            })
+                        })
+
+                        this.setState({
+                            gameData: availableGames
+                        });
+                    });
                 }
             }
         });
 
+        const availableGamesInNotes = [];
+
+        const allGames = [];
+
+
+
         this.dbRefGames = firebase.database().ref(`gameData/`);
 
         this.dbRefGames.on("value", snapshot => {
-            this.setState({
-                gameData: snapshot.val()
-            });
+            const games = snapshot.val();
+
+            for (let value in games) {
+                allGames.push(games[value]);
+            }
         });
+
     }
 
     doLogout(e) {
