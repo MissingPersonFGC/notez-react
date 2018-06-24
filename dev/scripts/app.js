@@ -59,7 +59,7 @@ class App extends React.Component {
     return (
       <Router>
         <div>
-          {this.state.loggedIn === false ? <Route exact path="/" component={Header} /> : <Route exact path ="/" component={FindNotes} />}
+          <Route exact path="/" component={FindNotes} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/add" component={AddNotes} />

@@ -69,6 +69,8 @@ class Register extends React.Component {
                             const dbRefUser = firebase.database().ref(`users/${dbRefUserId}`);
 
                             dbRefUser.set({userName: userName});
+
+                            window.location.assign('/');
                         });
 
                         this.setState({

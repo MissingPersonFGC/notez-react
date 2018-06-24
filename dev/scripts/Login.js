@@ -13,7 +13,8 @@ class Login extends React.Component {
         super();
         this.state = {
             loginEmail: '',
-            loginPassword: ''
+            loginPassword: '',
+            loggedIn: false
         }
         this.doLogin = this.doLogin.bind(this);
         this.setEmail = this.setEmail.bind(this);
@@ -41,15 +42,15 @@ class Login extends React.Component {
             const password = this.state.loginPassword;
             firebase.auth().signInWithEmailAndPassword(email, password).then((success) => {
                 console.log(`Logged in as ${success.user.email}`);
+                this.setState({
+                    loginEmail: '',
+                    loginPassword: '',
+                    loggedIn: true
+                });
+                window.location.assign("/");
             }), (error) => {
                 console.log(error);
-            }
-
-            this.setState({
-                loginEmail: '',
-                loginPassword: '',
-                loggedIn: true
-            })
+            }            
         } else {
             alert(`Please enter valid login credentials.`);
         }
