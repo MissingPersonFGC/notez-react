@@ -64,11 +64,19 @@ class Login extends React.Component {
                 </div>
                 <div className="user-form">
                     <form className="login-form">
-                        <input type="email" name="email" required placeholder="Email Address" onChange={this.setEmail}/>
-                        <input type="password" name="password" required placeholder="Password" onChange={this.setPassword} />
-                        <input type="submit" name="login" value="Sign-in" onClick={this.doLogin} />
-                        <Link to="/register">Sign-up</Link>
-                        <Link to="/">Home</Link>
+                        <div>
+                            <input type="email" name="email" required placeholder="Email Address" onChange={this.setEmail}/>
+                        </div>
+                        <div>
+                            <input type="password" name="password" required placeholder="Password" onChange={this.setPassword} />
+                        </div>
+                        <div>
+                            <input type="submit" name="login" value="Sign-in" onClick={this.doLogin} />
+                        </div>
+                        <div>
+                            <Link to="/register">Sign-up</Link>
+                            <Link to="/">Home</Link>
+                        </div>
                     </form>
                 </div>
             </div>

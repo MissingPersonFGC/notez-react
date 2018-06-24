@@ -122,13 +122,25 @@ class Register extends React.Component {
                 </div>
                 <div className="user-form">
                     <form className="user-register">
-                        <input type="text" name="username" placeholder="Username" value={this.state.registerUserName} onChange={this.writeUsername} />
-                        <input type="email" name="email" placeholder="Email Address" onChange={this.writeEmail} value={this.state.registerEmail} />
-                        <input type="password" name="password" placeholder="Password" onChange={this.writePwd} value={this.state.registerPwd} />
-                        <input type="password" name="password-verify" placeholder="Verify Password" onChange={this.writePwdVerify} value={this.state.registerPwdVerify} />
-                        <input type="submit" value="Sign-up" onClick={this.doRegister} />
-                        <Link to="/login">Sign-in</Link>
-                        <Link to="/">Home</Link>
+                        <div>
+                            <input type="text" name="username" placeholder="Username" value={this.state.registerUserName} onChange={this.writeUsername} />
+                        </div>                        
+                        <div>
+                            <input type="email" name="email" placeholder="Email Address" onChange={this.writeEmail} value={this.state.registerEmail} />
+                        </div>
+                        <div>
+                            <input type="password" name="password" placeholder="Password" onChange={this.writePwd} value={this.state.registerPwd} />
+                        </div>
+                        <div>
+                            <input type="password" name="password-verify" placeholder="Verify Password" onChange={this.writePwdVerify} value={this.state.registerPwdVerify} />
+                        </div>
+                        <div>
+                            <input type="submit" value="Sign-up" onClick={this.doRegister} />
+                        </div>
+                        <div>
+                            <Link to="/login">Sign-in</Link>
+                            <Link to="/">Home</Link>
+                        </div>
                     </form>
                 </div>
             </div>
