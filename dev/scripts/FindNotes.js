@@ -42,22 +42,18 @@ class FindNotes extends React.Component {
                 userId: user.uid,
                 loggedIn: true
             });
-        });
 
-        this.dbRefUser = firebase.database().ref(`users/${this.state.userId}`);
-    
-        const availableGames = [];
-    
-        this.dbRefUser.on("value", snapshot => {
-            const value = snapshot.val();
-            for (let user in value) {
-                const getUserName = value[user];
-                for (let userName in getUserName) {
+            this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
+
+            this.dbRefUser.on("value", snapshot => {
+                const value = snapshot.val();
+                for (let user in value) {
+                    const getUserName = value[user];
                     this.setState({
-                        userName: getUserName[userName]
+                        userName: getUserName
                     });
     
-                    this.dbRefAvailableGames = firebase.database().ref(`userData/${getUserName[userName]}/gameNotes/`);
+                    this.dbRefAvailableGames = firebase.database().ref(`userData/${getUserName}/gameNotes/`);
     
                     this.dbRefAvailableGames.on("value", snapshot => {
                         const games = snapshot.val();
@@ -79,8 +75,10 @@ class FindNotes extends React.Component {
                         });
                     });
                 }
-            }
+            });
         });
+    
+        const availableGames = [];
     
         const availableGamesInNotes = [];
     
