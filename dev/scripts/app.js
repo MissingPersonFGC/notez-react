@@ -12,7 +12,7 @@ import AddNotes from './AddNotes';
 // Initialize Firebase
 const config = {
   apiKey: "AIzaSyD7ZNBrn7hRM2lifehzWb2TcbwW8W8BzDs",
-  authDomain: "notez-app.firebaseapp.com",
+  authDomain: "notez-beta.coreylanier.com",
   databaseURL: "https://notez-app.firebaseio.com",
   projectId: "notez-app",
   storageBucket: "notez-app.appspot.com",

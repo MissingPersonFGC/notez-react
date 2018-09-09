@@ -173,13 +173,24 @@ class FindNotes extends React.Component {
             const unparsedNotes = snapshot.val();
             const parsedNotes = [];
 
-            for (let item in unparsedNotes) {
-                parsedNotes.push(unparsedNotes[item]);
+            if (snapshot.val()) {
+                for (let item in unparsedNotes) {
+                    parsedNotes.push(unparsedNotes[item]);
+                }
+                this.setState({
+                    gameNotes: parsedNotes,
+                    punishData: filterData
+                });                
+            } else {
+                parsedNotes.push({
+                    noteLongform: 'Alert',
+                    note: 'You have no notes for this match.'
+                });
+                this.setState({
+                    gameNotes: parsedNotes,
+                    punishData: filterData
+                });
             }
-            this.setState({
-                gameNotes: parsedNotes,
-                punishData: filterData
-            });
         });
     }
 

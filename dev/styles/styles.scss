@@ -407,31 +407,8 @@ footer {
   text-align: center;
   padding: 20px;
   padding-top: 40px;
+  width: 50%;
   margin: 0 auto;
-  display: none;
-  border: 1px $color-accent solid;
-  border-radius: 5px;
-  box-shadow: 0 0 15px #000;
-
-  &.make-visible {
-    display: block;
-    z-index: 30;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: $color-main;
-  }
-
-  .add-exit-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-
-    a {
-      color: $color-accent;
-    }
-  }
 
   h4 {
     text-align: left;
@@ -452,10 +429,18 @@ footer {
     color: $color-accent;
   }
 
-  button {
+  a {
     @include button($color-accent, $color-main, $font-main);
+    text-transform: capitalize;
     border: 0;
     margin-top: 20px;
+    margin-right: 20px;
+
+    &:last-of-type {
+      @include button($color-secondary, $color-main, $font-main);
+      text-transform: capitalize;
+      margin-right: 0;
+    }
   }
 }
 

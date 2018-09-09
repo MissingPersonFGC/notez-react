@@ -36,20 +36,20 @@ class AddNotes extends React.Component {
             this.setState({
                 userId: user.uid
             });
-        });
-        this.dbRefUser = firebase.database().ref(`users/${this.state.userId}`);
 
-        this.dbRefUser.on("value", snapshot => {
-            const value = snapshot.val();
-            for (let user in value) {
-                const getUserName = value[user];
-                for (let userName in getUserName) {
+            this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
+
+            this.dbRefUser.on("value", snapshot => {
+                const value = snapshot.val();
+                for (let user in value) {
+                    const getUserName = value[user];
                     this.setState({
-                        userName: getUserName[userName]
+                        userName: getUserName
                     });
                 }
-            }
+            });
         });
+        
 
         this.dbRefGames = firebase.database().ref(`gameData/`);
 
@@ -129,7 +129,6 @@ class AddNotes extends React.Component {
         const note = this.state.noteContent;
         const user = this.state.userName;
         let filterLong = '';
-        let length
         this.state.filterData.forEach((theFilters) => {
             if (theFilters.noteShorthand === filter) {
                 filterLong = theFilters.noteType;
@@ -151,19 +150,19 @@ class AddNotes extends React.Component {
 
     render() {
         return(
-            <div>
-                <div class="add-notes-game">
+            <div className="add-notes-popup">
+                <div className="add-notes-game">
                     <h4>Game:</h4>
-                    <select class="your-game" name="gameShorthand" defaultValue="" onChange={this.pullCharactersAndFilters}>
+                    <select className="your-game" name="gameShorthand" defaultValue="" onChange={this.pullCharactersAndFilters}>
                         <option value="" disabled>--Select your game--</option>
                         {this.state.gameData.map((game, index) => {
                             return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
                         })}
                     </select>
                 </div>
-                <div class="add-notes-matchup">
+                <div className="add-notes-matchup">
                     <h4>Matchup:</h4>
-                    <select class="your-character" name="yourCharacter" onChange={this.setYourChar}>
+                    <select className="your-character" name="yourCharacter" onChange={this.setYourChar}>
                         <option value="" disabled selected>--Your character--</option>
                         {this.state.characterData.map((character, index) => {
                             return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
@@ -172,29 +171,30 @@ class AddNotes extends React.Component {
 
                     vs.
 
-                    <select class="opp-character" name="opponentCharacter" onChange={this.setOppChar}>
+                    <select className="opp-character" name="opponentCharacter" onChange={this.setOppChar}>
                         <option value="" disabled selected>--Their character--</option>
                         {this.state.characterData.map((character, index) => {
                             return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
                         })}
                     </select>
                 </div>
-                <div class="add-notes-type">
+                <div className="add-notes-type">
                     <h4>Type of Note:</h4>
 
-                    <select class="note-type" name="noteType" onChange={this.setFilter}>
+                    <select className="note-type" name="noteType" onChange={this.setFilter}>
                         <option value="" disabled selected>--Note type--</option>
                         {this.state.filterData.map((filter, index) => {
                             return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                         })}
                     </select>
                 </div>
-                <div class="add-notes-note">
+                <div className="add-notes-note">
                     <h4>Note:</h4>
                     <textarea name="note" rows="2" cols="50" onChange={this.setNote} value={this.state.noteContent}></textarea>
                 </div>
-                <div class="add-notes-submit">
-                    <a href="" className="notes-add-submit button" onClick={this.addNote}><i class="far fa-plus-square"></i> Add</a>
+                <div className="add-notes-submit">
+                    <a href="" className="notes-add-submit button" onClick={this.addNote}><i className="far fa-plus-square"></i> Add</a>
+                    <Link to="/">Back</Link>
                 </div>
             </div>
         )
