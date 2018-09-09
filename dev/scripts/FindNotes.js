@@ -36,8 +36,6 @@ class FindNotes extends React.Component {
 
         this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
 
-            console.log(user);
-            console.log(user.uid);
             this.setState({
                 userId: user.uid,
                 loggedIn: true
@@ -97,9 +95,6 @@ class FindNotes extends React.Component {
 
     componentWillUnmount() {
         this.unsubscribe();
-    }
-
-    componentDidUpdate() {
     }
 
     doLogout(e) {
@@ -236,7 +231,6 @@ class FindNotes extends React.Component {
                                 </div>
                             </div>
                             <main>
-
                                 {
                                     this.state.gameData.length !== 0 ?
                                         <div>
