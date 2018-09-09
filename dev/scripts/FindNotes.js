@@ -238,7 +238,7 @@ class FindNotes extends React.Component {
                             <main>
 
                                 {
-                                    this.state.gameData !== 0 ?
+                                    this.state.gameData.length !== 0 ?
                                         <div>
                                             <section className="selection-head">
                                                 <h2>Select your game:</h2>
