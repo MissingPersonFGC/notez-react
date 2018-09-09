@@ -21,7 +21,8 @@ class FindNotes extends React.Component {
             selectedGame: '',
             yourCharacter: '',
             oppCharacter: '',
-            chosenFilter: ''
+            chosenFilter: '',
+            notesType: 'game'
         };
         this.doLogout = this.doLogout.bind(this);
         this.pullCharacters = this.pullCharacters.bind(this);
@@ -30,6 +31,7 @@ class FindNotes extends React.Component {
         this.getGameNotes = this.getGameNotes.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
         this.filterNotes = this.filterNotes.bind(this);
+        this.switchBetweenNotes = this.switchBetweenNotes.bind(this);
     }
 
     componentDidMount() {
@@ -116,6 +118,10 @@ class FindNotes extends React.Component {
             oppCharacter: "",
             chosenFilter: ""
         });
+    }
+
+    switchBetweenNotes(e) {
+
     }
 
     pullCharacters(e) {
