@@ -36,4 +36,20 @@
   .notes-header__heading h1 {
     margin: 5% 0;
   }
+
+  main .selection-head {
+    width: 95%;
+
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
+
+  .show-notes, .show-all {
+    margin-top: 3.5%;
+  }
+
+  .char-notes {
+    width: 95%;
+  }
 }
