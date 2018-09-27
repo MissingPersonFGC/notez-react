@@ -52,4 +52,17 @@
   .char-notes {
     width: 95%;
   }
+
+  .add-notes-popup {
+    width: 95%;
+    margin: 0;
+
+    select {
+      margin-right: 5px;
+    }
+
+    textarea {
+      width: 100%;
+    }
+  }
 }
