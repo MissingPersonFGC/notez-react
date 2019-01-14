@@ -172,7 +172,6 @@ class FindNotes extends React.Component {
         });
         this.dbRefGameNotes.on("value", snapshot => {
             const unparsedNotes = snapshot.val();
-            console.log(unparsedNotes);
             const parsedNotes = [];
 
             if (snapshot.val()) {
