@@ -32,6 +32,7 @@ class FindNotes extends React.Component {
         this.changeFilter = this.changeFilter.bind(this);
         this.filterNotes = this.filterNotes.bind(this);
         this.switchBetweenNotes = this.switchBetweenNotes.bind(this);
+        this.removeNote = this.removeNote.bind(this);
     }
 
     componentDidMount() {
@@ -196,6 +197,10 @@ class FindNotes extends React.Component {
         });
     }
 
+    removeNote(e) {
+
+    }
+
     changeFilter(e) {
         const selectedFilter = e.target.value;
         this.setState({
@@ -299,7 +304,7 @@ class FindNotes extends React.Component {
                                                     <ul>
                                                         {this.state.gameNotes !== null ? 
                                                             this.state.gameNotes.map((note, index) => {
-                                                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} noteClass={this.state.noteClass} key={index} />
+                                                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} noteClass={this.state.noteClass} key={this.state.gameNotes.key} />
                                                             }) 
                                                         : <li>No notes be here!</li>}
                                                     </ul>
