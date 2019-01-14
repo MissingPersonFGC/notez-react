@@ -178,12 +178,13 @@ class FindNotes extends React.Component {
             if (snapshot.val()) {
                 for (let item in unparsedNotes) {
                     unparsedNotes[item].key = item;
+                    console.log(unparsedNotes[item].key);
                     parsedNotes.push(unparsedNotes[item]);
                 }
                 this.setState({
                     gameNotes: parsedNotes,
                     punishData: filterData
-                });                
+                });
             } else {
                 parsedNotes.push({
                     noteLongform: 'Alert',
@@ -198,7 +199,8 @@ class FindNotes extends React.Component {
     }
 
     removeNote(e) {
-
+        e.preventDefault();
+        console.log(`Deleting note`);
     }
 
     changeFilter(e) {
@@ -264,7 +266,7 @@ class FindNotes extends React.Component {
                                                 <select className="your-character" name="your-character" defaultValue="" onChange={this.setYourChar}>
                                                     <option value="" disabled>--Your character--</option>
                                                     {this.state.characterData.map((character, index) => {
-                                                        return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
+                                                        return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index} />
                                                     })}
                                                 </select>
                                                 vs.
@@ -304,7 +306,7 @@ class FindNotes extends React.Component {
                                                     <ul>
                                                         {this.state.gameNotes !== null ? 
                                                             this.state.gameNotes.map((note, index) => {
-                                                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} noteClass={this.state.noteClass} key={this.state.gameNotes.key} />
+                                                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.gameNotes[index].key} removeNote={this.removeNote} itemID={this.state.gameNotes[index].key} />
                                                             }) 
                                                         : <li>No notes be here!</li>}
                                                     </ul>
