@@ -33,6 +33,7 @@ class FindNotes extends React.Component {
         this.filterNotes = this.filterNotes.bind(this);
         this.switchBetweenNotes = this.switchBetweenNotes.bind(this);
         this.removeNote = this.removeNote.bind(this);
+        this.openNoteEditor = this.openNoteEditor.bind(this);
     }
 
     componentDidMount() {
@@ -224,6 +225,10 @@ class FindNotes extends React.Component {
             gameNotes: reducedNotes
         });
     }
+
+    openNoteEditor(e) {
+        e.preventDefault();
+    }
     
     render() {
         return(
@@ -306,7 +311,7 @@ class FindNotes extends React.Component {
                                                     <ul>
                                                         {this.state.gameNotes !== null ? 
                                                             this.state.gameNotes.map((note, index) => {
-                                                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.gameNotes[index].key} removeNote={this.removeNote} itemID={this.state.gameNotes[index].key} />
+                                                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.gameNotes[index].key} removeNote={this.removeNote} openNoteEditor={this.openNoteEditor} itemID={this.state.gameNotes[index].key} />
                                                             }) 
                                                         : <li>No notes be here!</li>}
                                                     </ul>
