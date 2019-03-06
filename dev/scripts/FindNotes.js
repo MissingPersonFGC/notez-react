@@ -199,9 +199,8 @@ class FindNotes extends React.Component {
         });
     }
 
-    removeNote(e) {
-        e.preventDefault();
-        console.log(`Deleting note`);
+    removeNote(itemToRemove) {
+        console.log(`Deleting note ${itemToRemove}`);
     }
 
     changeFilter(e) {
