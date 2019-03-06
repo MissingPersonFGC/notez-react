@@ -200,7 +200,14 @@ class FindNotes extends React.Component {
     }
 
     removeNote(itemToRemove) {
-        console.log(`Deleting note ${itemToRemove}`);
+        const yourGame = this.state.selectedGame;
+        const yourChar = this.state.yourCharacter;
+        const oppChar = this.state.oppCharacter;
+        const you = this.state.userName;
+        this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
+        this.dbRefGameNotes.child(itemToRemove).once('value', (snapshot) => {
+            this.dbRefGameNotes.child(itemToRemove).remove();
+        })
     }
 
     changeFilter(e) {
@@ -225,8 +232,7 @@ class FindNotes extends React.Component {
         });
     }
 
-    openNoteEditor(e) {
-        e.preventDefault();
+    openNoteEditor() {
     }
     
     render() {
