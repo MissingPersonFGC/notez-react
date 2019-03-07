@@ -22,7 +22,9 @@ class FindNotes extends React.Component {
             yourCharacter: '',
             oppCharacter: '',
             chosenFilter: '',
-            notesType: 'game'
+            notesType: 'game',
+            quickAddFilter: '',
+            quickAddNote: '',
         };
         this.doLogout = this.doLogout.bind(this);
         this.pullCharacters = this.pullCharacters.bind(this);
@@ -113,7 +115,7 @@ class FindNotes extends React.Component {
     }
 
     changeQuickAddNote(e) {
-        
+
     }
 
     doLogout(e) {
