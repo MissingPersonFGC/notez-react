@@ -337,6 +337,10 @@ main {
   }
 }
 
+.char-notes ul {
+  margin-top: 35px;
+}
+
 // Make the Character Notes and filter initially invisible, then make visible on click
 
 .char-notes ul li, .char-notes .wrapper {
@@ -347,6 +351,7 @@ main {
 .char-notes ul li {
   list-style-type: none;
   list-style-position: outside;
+  padding-bottom: 10px;
 
   a {
     color: $color-accent;
@@ -405,6 +410,29 @@ footer {
       padding-right: 7.5%;
     }
   }
+}
+
+.note-qa-li {
+  margin-top: 25px;
+
+  input[type=text] {
+    width: 40%;
+    background: $color-secondary;
+    color: $color-main;
+    font-family: $font-main;
+    padding: 5px;
+    border: 1px solid black;
+  }
+
+  a {
+    @include button($color-secondary, $color-main, $font-main);
+
+    margin-left: 10px;
+  }
+}
+
+.note-filter {
+  margin-left: 10px;
 }
 
 .add-notes-popup {

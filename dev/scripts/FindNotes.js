@@ -127,12 +127,28 @@ class FindNotes extends React.Component {
     }
 
     pullCharacters(e) {
+        const filterData = []
         const selectedGame = e.target.value;
         this.dbRefCharacters = firebase.database().ref(`characterData/${selectedGame}/`);
         this.dbRefCharacters.on("value", snapshot => {
             this.setState({
                 selectedGame: selectedGame,
                 characterData: snapshot.val()
+            });
+        });
+        this.dbRefFilterGameSpecific = firebase.database().ref(`punishData/${selectedGame}`);
+        this.dbRefFilterGlobal = firebase.database().ref(`punishData/global/`);
+        this.dbRefFilterGlobal.on("value", snapshot => {
+            snapshot.val().forEach((filter) => {
+                filterData.push(filter);
+            });
+            this.dbRefFilterGameSpecific.on("value", snapshot2 => {
+                snapshot2.val().forEach((filter) => {
+                    filterData.push(filter);
+                })
+                this.setState({
+                    punishData: filterData
+                })
             });
         });
     }
@@ -153,25 +169,12 @@ class FindNotes extends React.Component {
 
     getGameNotes(e) {
         e.preventDefault();
-        const filterData = [];
         const yourGame = this.state.selectedGame;
         const yourChar = this.state.yourCharacter;
         const oppChar = this.state.oppCharacter;
         const you = this.state.userName;
 
         this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
-        this.dbRefFilterGameSpecific = firebase.database().ref(`punishData/${yourGame}`);
-        this.dbRefFilterGlobal = firebase.database().ref(`punishData/global/`);
-        this.dbRefFilterGlobal.on("value", snapshot => {
-            snapshot.val().forEach((filter) => {
-                filterData.push(filter);
-            });
-            this.dbRefFilterGameSpecific.on("value", snapshot2 => {
-                snapshot2.val().forEach((filter) => {
-                    filterData.push(filter);
-                })
-            });
-        });
         this.dbRefGameNotes.on("value", snapshot => {
             const unparsedNotes = snapshot.val();
             const parsedNotes = [];
@@ -183,8 +186,7 @@ class FindNotes extends React.Component {
                     parsedNotes.push(unparsedNotes[item]);
                 }
                 this.setState({
-                    gameNotes: parsedNotes,
-                    punishData: filterData
+                    gameNotes: parsedNotes
                 });
             } else {
                 parsedNotes.push({
@@ -192,8 +194,7 @@ class FindNotes extends React.Component {
                     note: 'You have no notes for this match.'
                 });
                 this.setState({
-                    gameNotes: parsedNotes,
-                    punishData: filterData
+                    gameNotes: parsedNotes
                 });
             }
         });
@@ -318,8 +319,19 @@ class FindNotes extends React.Component {
                                                             this.state.gameNotes.map((note, index) => {
                                                                 return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.gameNotes[index].key} removeNote={this.removeNote} openNoteEditor={this.openNoteEditor} itemID={this.state.gameNotes[index].key} />
                                                             })
-                                                        : <li>No notes be here!</li>}
-                                                        {this.state.gameNotes.length !== 0 ? <li><span className="note-type quick-add">Quick Add:</span></li> : null}
+                                                        : null}
+                                                        {this.state.gameNotes.length !== 0 ? 
+                                                            <li className="note-qa-li">
+                                                                <span className="note-type quick-add">Quick Add:</span>
+                                                                <select name="note-filter" className="note-filter qa-note-filter">
+                                                                    <option value="">--Add Filter--</option>
+                                                                    {this.state.punishData.map((filter, index) => {
+                                                                        return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                                                    })}
+                                                                </select>
+                                                                <input type="text" name="quick-add-note-text" placeholder="Write your note for this matchup here."></input>
+                                                                <a href="#" className="button">Add Note</a>
+                                                            </li> : null}
                                                     </ul>
                                                 </div>
                                             </section>
@@ -330,7 +342,7 @@ class FindNotes extends React.Component {
                                     </section>
                                 }
                                 <section className="notes-add">
-                                    <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes</Link>
+                                    <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Game</Link>
                                 </section>
                             </main>
                         </div>
