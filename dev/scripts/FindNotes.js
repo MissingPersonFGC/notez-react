@@ -34,6 +34,9 @@ class FindNotes extends React.Component {
         this.switchBetweenNotes = this.switchBetweenNotes.bind(this);
         this.removeNote = this.removeNote.bind(this);
         this.openNoteEditor = this.openNoteEditor.bind(this);
+        this.changeQuickAddNote = this.changeQuickAddNote.bind(this);
+        this.changeQuickAddFilter = this.changeQuickAddFilter.bind(this);
+        this.quickAddNote = this.quickAddNote.bind(this);
     }
 
     componentDidMount() {
@@ -99,6 +102,18 @@ class FindNotes extends React.Component {
 
     componentWillUnmount() {
         this.unsubscribe();
+    }
+
+    quickAddNote(e) {
+        e.preventDefault();
+    }
+
+    changeQuickAddFilter(e) {
+
+    }
+
+    changeQuickAddNote(e) {
+        
     }
 
     doLogout(e) {
