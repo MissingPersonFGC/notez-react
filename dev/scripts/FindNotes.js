@@ -317,8 +317,9 @@ class FindNotes extends React.Component {
                                                         {this.state.gameNotes !== null ? 
                                                             this.state.gameNotes.map((note, index) => {
                                                                 return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.gameNotes[index].key} removeNote={this.removeNote} openNoteEditor={this.openNoteEditor} itemID={this.state.gameNotes[index].key} />
-                                                            }) 
+                                                            })
                                                         : <li>No notes be here!</li>}
+                                                        {this.state.gameNotes.length !== 0 ? <li><span className="note-type quick-add">Quick Add:</span></li> : null}
                                                     </ul>
                                                 </div>
                                             </section>
