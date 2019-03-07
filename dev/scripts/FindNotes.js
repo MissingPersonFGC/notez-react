@@ -108,14 +108,42 @@ class FindNotes extends React.Component {
 
     quickAddNote(e) {
         e.preventDefault();
+        const game = this.state.selectedGame;
+        const you = this.state.yourCharacter;
+        const opponent = this.state.oppCharacter;
+        const filterShort = this.state.quickAddFilter;
+        const newNote = this.state.quickAddNote;
+        const user = this.state.userName;
+        let filterLong = '';
+        this.state.punishData.forEach((filter) => {
+            if (filter.noteShorthand === filterShort) {
+                filterLong = filter.noteType;
+            }
+        });
+        const noteFormatted = {
+            "note": newNote,
+            "noteType": filterShort,
+            "noteLongform": filterLong
+        }
+        this.dbRefNotesLocation = firebase.database().ref(`userData/${user}/gameNotes/${game}/${you}/${opponent}/`);
+        this.dbRefNotesLocation.push(noteFormatted);
+        this.setState({
+            quickAddNote: ''
+        });
     }
 
     changeQuickAddFilter(e) {
-
+        const quickAddFilter = e.target.value;
+        this.setState({
+            quickAddFilter: quickAddFilter
+        });
     }
 
     changeQuickAddNote(e) {
-
+        const newNote = e.target.value;
+        this.setState({
+            quickAddNote: newNote
+        });
     }
 
     doLogout(e) {
@@ -340,14 +368,14 @@ class FindNotes extends React.Component {
                                                         {this.state.gameNotes.length !== 0 ? 
                                                             <li className="note-qa-li">
                                                                 <span className="note-type quick-add">Quick Add:</span>
-                                                                <select name="note-filter" className="note-filter qa-note-filter">
+                                                                <select name="note-filter" className="note-filter qa-note-filter" onChange={this.changeQuickAddFilter}>
                                                                     <option value="">--Add Filter--</option>
                                                                     {this.state.punishData.map((filter, index) => {
                                                                         return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                                                     })}
                                                                 </select>
-                                                                <input type="text" name="quick-add-note-text" placeholder="Write your note for this matchup here."></input>
-                                                                <a href="#" className="button">Add Note</a>
+                                                                <input type="text" name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this matchup here." value={this.state.quickAddNote}></input>
+                                                                <a href="#" onClick={this.quickAddNote} className="button">Add Note</a>
                                                             </li> : null}
                                                     </ul>
                                                 </div>
