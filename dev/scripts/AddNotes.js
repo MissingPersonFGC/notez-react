@@ -69,24 +69,6 @@ class AddNotes extends React.Component {
                 }
             });
         });
-        
-
-        
-
-        // this.dbRefGames.on("value", snapshot => {
-        //     console.log(getUserName);
-        //     const unusedGames = snapshot.val();
-        //     console.log(unusedGames);
-        //     this.dbRefYourGames = firebase.database().ref(`userData/${getUserName}/`);
-        //     let yourGames = '';
-        //     this.dbRefYourGames.on(`value`, (snapshot) => {
-        //         yourGames = snapshot.val();
-        //         console.log(yourGames);
-        //     })
-        //     this.setState({
-        //         gameData: snapshot.val()
-        //     });
-        // });
     }
 
     pullCharactersAndFilters(e) {

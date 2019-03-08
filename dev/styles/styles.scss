@@ -355,6 +355,11 @@ main {
 
   > a:not(.button) svg {
     margin-left: 5px;
+    transition: all 0.5s;
+
+    &:hover {
+      color: darken($color-accent, 10);
+    }
   }
 
   a {
