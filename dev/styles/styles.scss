@@ -353,8 +353,16 @@ main {
   list-style-position: outside;
   padding-bottom: 10px;
 
+  > a:not(.button) svg {
+    margin-left: 5px;
+  }
+
   a {
     color: $color-accent;
+
+    &.button {
+      color: $color-main;
+    }
   }
 
   .note-type {
