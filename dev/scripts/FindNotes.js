@@ -26,6 +26,10 @@ class FindNotes extends React.Component {
             notesType: 'game',
             quickAddFilter: '',
             quickAddNote: '',
+            showEdit: false,
+            editKey: '',
+            editFilter: '',
+            editNote: ''
         };
         this.doLogout = this.doLogout.bind(this);
         this.pullCharacters = this.pullCharacters.bind(this);
