@@ -32,6 +32,7 @@ class AddNotes extends React.Component {
     }
 
     componentDidMount() {
+        let getUserName = '';
         firebase.auth().onAuthStateChanged(user => {
             this.setState({
                 userId: user.uid
@@ -42,22 +43,50 @@ class AddNotes extends React.Component {
             this.dbRefUser.on("value", snapshot => {
                 const value = snapshot.val();
                 for (let user in value) {
-                    const getUserName = value[user];
-                    this.setState({
-                        userName: getUserName
+                    getUserName = value[user];
+                    console.log(getUserName);
+                    this.dbRefGames = firebase.database().ref(`gameData/`);
+                    this.dbRefGames.on('value', (snapshot2) => {
+                        const unusedGames = snapshot2.val();
+                        console.log(unusedGames);
+
+                        this.dbRefYourGames = firebase.database().ref(`userData/${getUserName}/gameNotes`)
+                        this.dbRefYourGames.on('value', (snapshot3) => {
+                            const yourGames = snapshot3.val();
+                            console.log(yourGames);
+                            for (let game in yourGames) {
+                                const index = unusedGames.findIndex(g => 
+                                    g.gameShorthand == game
+                                );
+                                unusedGames.splice(index, 1);
+                            }
+                            this.setState({
+                                userName: getUserName,
+                                gameData: unusedGames
+                            });
+                        });
                     });
                 }
             });
         });
         
 
-        this.dbRefGames = firebase.database().ref(`gameData/`);
+        
 
-        this.dbRefGames.on("value", snapshot => {
-            this.setState({
-                gameData: snapshot.val()
-            });
-        });
+        // this.dbRefGames.on("value", snapshot => {
+        //     console.log(getUserName);
+        //     const unusedGames = snapshot.val();
+        //     console.log(unusedGames);
+        //     this.dbRefYourGames = firebase.database().ref(`userData/${getUserName}/`);
+        //     let yourGames = '';
+        //     this.dbRefYourGames.on(`value`, (snapshot) => {
+        //         yourGames = snapshot.val();
+        //         console.log(yourGames);
+        //     })
+        //     this.setState({
+        //         gameData: snapshot.val()
+        //     });
+        // });
     }
 
     pullCharactersAndFilters(e) {
