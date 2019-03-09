@@ -44,6 +44,7 @@ class FindNotes extends React.Component {
         this.changeQuickAddNote = this.changeQuickAddNote.bind(this);
         this.changeQuickAddFilter = this.changeQuickAddFilter.bind(this);
         this.quickAddNote = this.quickAddNote.bind(this);
+        this.cancelEdit = this.cancelEdit.bind(this);
     }
 
     componentDidMount() {
@@ -200,6 +201,15 @@ class FindNotes extends React.Component {
                     punishData: filterData
                 })
             });
+        });
+    }
+
+    cancelEdit() {
+        this.setState({
+            editFilter: '',
+            editKey: '',
+            editNote: '',
+            showEdit: false
         });
     }
 
@@ -411,6 +421,9 @@ class FindNotes extends React.Component {
                                     <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Game</Link>
                                 </section>
                             </main>
+                            <Modal show={this.state.showEdit} onHide={this.cancelEdit}>
+                                <Modal.Header closeButton></Modal.Header>
+                            </Modal>
                         </div>
                     :
                         <header className="main-page-head head">
