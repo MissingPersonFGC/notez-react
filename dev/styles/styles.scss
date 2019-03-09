@@ -382,6 +382,14 @@ main {
   display: block;
 }
 
+.modal-body a {
+  @include button($color-secondary, $color-main, $font-main);
+
+  &.button-edit-submit {
+    @include button($color-accent, $color-main, $font-main);
+  }
+}
+
 // Footer
 
 footer {

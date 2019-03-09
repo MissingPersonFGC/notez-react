@@ -45,6 +45,9 @@ class FindNotes extends React.Component {
         this.changeQuickAddFilter = this.changeQuickAddFilter.bind(this);
         this.quickAddNote = this.quickAddNote.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
+        this.changeEditFilter = this.changeEditFilter.bind(this);
+        this.changeEditNote = this.changeEditNote.bind(this);
+        this.postEdit = this.postEdit.bind(this);
     }
 
     componentDidMount() {
@@ -311,6 +314,50 @@ class FindNotes extends React.Component {
             });
         });
     }
+
+    changeEditFilter(e) {
+        const newFilter = e.target.value;
+        this.setState({
+            editFilter: newFilter
+        });
+    }
+
+    changeEditNote(e) {
+        const newNote = e.target.value;
+        this.setState({
+            editNote: newNote
+        });
+    }
+
+    postEdit(e) {
+        e.preventDefault();
+        const editKey = this.state.editKey;
+        const user = this.state.userName;
+        const you = this.state.yourCharacter;
+        const game = this.state.selectedGame;
+        const opponent = this.state.oppCharacter;
+        const filterShort = this.state.editFilter;
+        const newNote = this.state.editNote;
+        let filterLong = '';
+        this.state.punishData.forEach((filter) => {
+            if (filter.noteShorthand === filterShort) {
+                filterLong = filter.noteType;
+            }
+        });
+        const noteFormatted = {
+            "note": newNote,
+            "noteType": filterShort,
+            "noteLongform": filterLong
+        }
+        this.dbRefEditNote = firebase.database().ref(`userData/${user}/gameNotes/${game}/${you}/${opponent}/${editKey}`);
+        this.dbRefEditNote.set(noteFormatted);
+        this.setState({
+            editFilter: '',
+            editKey: '',
+            editNote: '',
+            showEdit: false
+        });
+    }
     
     render() {
         return(
@@ -422,7 +469,22 @@ class FindNotes extends React.Component {
                                 </section>
                             </main>
                             <Modal show={this.state.showEdit} onHide={this.cancelEdit}>
-                                <Modal.Header closeButton></Modal.Header>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Edit existing note</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <p>
+                                        <span className="note-type">Change Filter:</span> <select name="change-filter" onChange={this.changeEditFilter} value={this.state.editFilter}>
+                                            {this.state.punishData.map((filter, index) => {
+                                                return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                            })}
+                                        </select> 
+                                    </p>
+                                    <p><span className="note-type">Change Note:</span></p>
+                                    <textarea rows="2" cols="40" onChange={this.changeEditNote} value={this.state.editNote}></textarea>
+                                    <a className="button-edit-submit" href="#" onClick={this.postEdit}>Edit Note</a>
+                                    <a href="#" onClick={this.cancelEdit}>Cancel</a>
+                                </Modal.Body>
                             </Modal>
                         </div>
                     :
