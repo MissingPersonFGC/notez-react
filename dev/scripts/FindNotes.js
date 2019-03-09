@@ -6,7 +6,7 @@ import PopulateGames from './PopulateGames';
 import PopulateCharacters from './PopulateCharacters';
 import PopulateNotes from './PopulateNotes';
 import PopulateFilters from './PopulateFilters';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 
 class FindNotes extends React.Component {
     constructor() {
