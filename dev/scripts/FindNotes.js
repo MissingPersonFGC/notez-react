@@ -283,7 +283,23 @@ class FindNotes extends React.Component {
         });
     }
 
-    openNoteEditor() {
+    openNoteEditor(key) {
+        const editKey = key;
+        const user = this.state.userName;
+        const you = this.state.yourCharacter;
+        const game = this.state.selectedGame;
+        const opponent = this.state.oppCharacter;
+        let noteEdited = '';
+        this.dbRefEditNote = firebase.database().ref(`userData/${user}/gameNotes/${game}/${you}/${opponent}/${editKey}`);
+        this.dbRefEditNote.on('value', (snapshot) => {
+            noteEdited = snapshot.val();
+            this.setState({
+                editKey: editKey,
+                editFilter: noteEdited.noteType,
+                editNote: noteEdited.note,
+                showEdit: true
+            });
+        });
     }
     
     render() {
