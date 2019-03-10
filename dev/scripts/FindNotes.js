@@ -15,6 +15,7 @@ class FindNotes extends React.Component {
             notesType: 'game',
         };
         this.doLogout = this.doLogout.bind(this);
+        this.switchBetweenNotes = this.switchBetweenNotes.bind(this);
     }
 
     componentDidMount() {
@@ -66,7 +67,18 @@ class FindNotes extends React.Component {
     }
 
     switchBetweenNotes(e) {
+        const checked = this.refs.notesCheck.checked;
+        if (checked === true) {
+            this.setState({
+                notesType: 'player'
+            });
+        }
 
+        if (checked === false) {
+            this.setState({
+                notesType: 'game'
+            })
+        }
     }
     
     render() {
@@ -89,8 +101,8 @@ class FindNotes extends React.Component {
                                 </div>
                             </div>
                             <label className="switch">
-                                <input type="checkbox" />
-                                <span className="slider"></span>
+                                <input type="checkbox" name="note-type-toggle" onChange={this.switchBetweenNotes}  ref="notesCheck" />
+                                Game Notes <span className="slider"></span> Player Notes
                             </label>
                             {this.state.notesType === 'game' ? 
                                 <Route exact path="/" component={GameNotes} /> : <Route exact path="/" component={PlayerNotes} />
