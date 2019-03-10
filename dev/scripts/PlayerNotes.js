@@ -18,7 +18,16 @@ class PlayerNotes extends React.Component {
             characterData: [],
             playerNotes: [],
             playerData: [],
-            filterData: []
+            filterData: [],
+            opponent: '',
+            selectedGame: '',
+            chosenFilter: '',
+            quickAddFilter: '',
+            quickAddNote: '',
+            showEdit: false,
+            editFilter: '',
+            editKey: '',
+            editNote: ''
         }
     }
 }

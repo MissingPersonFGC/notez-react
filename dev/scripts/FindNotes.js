@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import firebase from 'firebase';
 import GameNotes from './GameNotes';
+import PlayerNotes from './PlayerNotes';
 
 class FindNotes extends React.Component {
     constructor() {
