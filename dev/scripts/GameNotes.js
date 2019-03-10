@@ -364,19 +364,6 @@ class GameNotes extends React.Component {
                 {
                     this.state.loggedIn === true ?                   
                         <div>
-                            <div className="notes-header">
-                                <div className="container">
-                                    <div className="notes-header__heading">
-                                        <h1>NoteZ</h1>
-                                    </div>
-                                    <div className="notes-header__user">
-                                        <p>Welcome, {this.state.userName}!</p>
-                                        <div className="notes-header__user__button">
-                                            <button onClick={this.doLogout}>Sign-out</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <main>
                                 {
                                     this.state.gameData.length !== 0 ?
