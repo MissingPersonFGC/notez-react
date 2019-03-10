@@ -7,9 +7,8 @@ import PopulateCharacters from './PopulateCharacters';
 import PopulateNotes from './PopulateNotes';
 import PopulateFilters from './PopulateFilters';
 import Modal from 'react-bootstrap/Modal';
-import GameNotes from './GameNotes';
 
-class FindNotes extends React.Component {
+class GameNotes extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -523,4 +522,4 @@ class FindNotes extends React.Component {
     }
 }
 
-export default FindNotes;
+export default GameNotes;
