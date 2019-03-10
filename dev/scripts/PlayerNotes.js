@@ -7,3 +7,20 @@ import PopulateCharacters from './PopulateCharacters';
 import PopulateNotes from './PopulateNotes';
 import PopulateFilters from './PopulateFilters';
 import Modal from 'react-bootstrap/Modal';
+
+class PlayerNotes extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            userName: '',
+            userId: '',
+            gameData: [],
+            characterData: [],
+            playerNotes: [],
+            playerData: [],
+            filterData: []
+        }
+    }
+}
+
+export default PlayerNotes;

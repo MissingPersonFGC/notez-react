@@ -23,7 +23,6 @@ class GameNotes extends React.Component {
             yourCharacter: '',
             oppCharacter: '',
             chosenFilter: '',
-            notesType: 'game',
             quickAddFilter: '',
             quickAddNote: '',
             showEdit: false,
