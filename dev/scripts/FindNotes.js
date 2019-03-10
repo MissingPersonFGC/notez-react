@@ -9,6 +9,8 @@ class FindNotes extends React.Component {
         super();
         this.state = {
             loggedIn: false,
+            userName: '',
+            userId: '',
             notesType: 'game',
         };
         this.doLogout = this.doLogout.bind(this);
@@ -19,7 +21,20 @@ class FindNotes extends React.Component {
         this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
 
             this.setState({
+                userId: user.uid,
                 loggedIn: true
+            });
+
+            this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
+
+            this.dbRefUser.on("value", snapshot => {
+                const value = snapshot.val();
+                for (let user in value) {
+                    const getUserName = value[user];
+                    this.setState({
+                        userName: getUserName
+                    });
+                }
             });
         });
     }
