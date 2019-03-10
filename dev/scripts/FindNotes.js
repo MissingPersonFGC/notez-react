@@ -100,10 +100,16 @@ class FindNotes extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            <label className="switch">
-                                <input type="checkbox" name="note-type-toggle" onChange={this.switchBetweenNotes}  ref="notesCheck" />
-                                Game Notes <span className="slider"></span> Player Notes
-                            </label>
+                            <div className="toggle-container">
+                                <div className="game-toggle-label">Game Notes</div>
+                                <div className="toggle">
+                                    <label className="switch">
+                                        <input type="checkbox" name="note-type-toggle" onChange={this.switchBetweenNotes}  ref="notesCheck" />
+                                        <span className="slider"></span>
+                                    </label>
+                                </div>
+                                <div className="player-toggle-label">Player Notes</div>
+                            </div>
                             {this.state.notesType === 'game' ? 
                                 <Route exact path="/" component={GameNotes} /> : <Route exact path="/" component={PlayerNotes} />
                             }
