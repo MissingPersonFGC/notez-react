@@ -30,6 +30,14 @@ class PlayerNotes extends React.Component {
             editNote: ''
         }
     }
+
+    render() {
+        return(
+            <div>
+                <p>Your player notes will go here!</p>
+            </div>
+        )
+    }
 }
 
 export default PlayerNotes;

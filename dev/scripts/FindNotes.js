@@ -89,7 +89,7 @@ class FindNotes extends React.Component {
                                 </div>
                             </div>
                             {this.state.notesType === 'game' ? 
-                                <Route exact path="/" component={GameNotes} /> : null
+                                <Route exact path="/" component={GameNotes} /> : <Route exact path="/" component={PlayerNotes} />
                             }
                         </div>
                     :
