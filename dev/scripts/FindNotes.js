@@ -88,6 +88,10 @@ class FindNotes extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            <label className="switch">
+                                <input type="checkbox" />
+                                <span className="slider"></span>
+                            </label>
                             {this.state.notesType === 'game' ? 
                                 <Route exact path="/" component={GameNotes} /> : <Route exact path="/" component={PlayerNotes} />
                             }
