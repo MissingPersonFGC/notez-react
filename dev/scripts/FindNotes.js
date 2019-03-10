@@ -245,7 +245,6 @@ class FindNotes extends React.Component {
             if (snapshot.val()) {
                 for (let item in unparsedNotes) {
                     unparsedNotes[item].key = item;
-                    console.log(unparsedNotes[item].key);
                     parsedNotes.push(unparsedNotes[item]);
                 }
                 this.setState({
