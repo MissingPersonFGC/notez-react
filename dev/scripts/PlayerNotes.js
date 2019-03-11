@@ -50,6 +50,19 @@ class PlayerNotes extends React.Component {
                     });
 
                     this.dbRefAvailablePlayers = firebase.database().ref(`userData/${getUserName}/playerNotes/`);
+
+                    this.dbRefAvailablePlayers.on('value', (snapshot) => {
+                        const playersDb = snapshot.val();
+                        const playerList = []
+                        
+                        for (let name in playersDb) {
+                            playerList.push(name);
+                        }
+
+                        this.setState({
+                            playerData: playerList
+                        });
+                    });
                 }
             });
         });
