@@ -71,7 +71,20 @@ class PlayerNotes extends React.Component {
     }
 
     pullGames(e) {
-
+        const chosenPlayer = e.target.value;
+        const user = this.state.userName;
+        this.dbRefGamesInNotes = firebase.database().ref(`userData/${user}/playerNotes/${chosenPlayer}/`);
+        const gamesInPlayerNotes = [];
+        this.dbRefGamesInNotes.on('value', (snapshot) => {
+            const arr = snapshot.val();
+            for (let game in arr) {
+                gamesInPlayerNotes.push(game);
+            }
+            this.dbRefGamesList = firebase.database().ref(`gameData/`);
+            this.dbRefGamesList.on('value', (snapshot) => {
+                
+            });
+        })
     }
 
     render() {
