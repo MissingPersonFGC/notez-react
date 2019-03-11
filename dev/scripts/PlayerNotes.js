@@ -7,6 +7,7 @@ import PopulateCharacters from './PopulateCharacters';
 import PopulateNotes from './PopulateNotes';
 import PopulateFilters from './PopulateFilters';
 import Modal from 'react-bootstrap/Modal';
+import PopulatePlayers from './PopulatePlayers';
 
 class PlayerNotes extends React.Component {
     constructor() {
@@ -29,6 +30,7 @@ class PlayerNotes extends React.Component {
             editKey: '',
             editNote: ''
         }
+        this.pullGames = this.pullGames.bind(this);
     }
     
     componentDidMount() {
@@ -68,11 +70,23 @@ class PlayerNotes extends React.Component {
         });
     }
 
+    pullGames(e) {
+
+    }
+
     render() {
         return(
             <main>
                 <section className="selection-head">
                     <h2>Select your opponent:</h2>
+                </section>
+                <section className="game-select">
+                    <select defaultValue="" onChange={this.pullGames}>
+                        <option key="empty" value="" disabled>------</option>
+                        {this.state.playerData.map((player, index) => {
+                            return <PopulatePlayers playerName={player} key={index} />
+                        })}
+                    </select>
                 </section>
             </main>
         )
