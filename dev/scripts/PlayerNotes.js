@@ -54,7 +54,7 @@ class PlayerNotes extends React.Component {
                     this.dbRefAvailablePlayers.on('value', (snapshot) => {
                         const playersDb = snapshot.val();
                         const playerList = []
-                        
+
                         for (let name in playersDb) {
                             playerList.push(name);
                         }
@@ -70,9 +70,11 @@ class PlayerNotes extends React.Component {
 
     render() {
         return(
-            <div>
-                <p>Your player notes will go here!</p>
-            </div>
+            <main>
+                <section className="selection-head">
+                    <h2>Select your opponent:</h2>
+                </section>
+            </main>
         )
     }
 }
