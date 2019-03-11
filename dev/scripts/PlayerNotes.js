@@ -30,6 +30,30 @@ class PlayerNotes extends React.Component {
             editNote: ''
         }
     }
+    
+    componentDidMount() {
+        this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
+
+            this.setState({
+                userId: user.uid,
+                loggedIn: true
+            });
+
+            this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
+
+            this.dbRefUser.on("value", snapshot => {
+                const value = snapshot.val();
+                for (let user in value) {
+                    const getUserName = value[user];
+                    this.setState({
+                        userName: getUserName
+                    });
+
+                    this.dbRefAvailablePlayers = firebase.database().ref(`userData/${getUserName}/playerNotes/`);
+                }
+            });
+        });
+    }
 
     render() {
         return(

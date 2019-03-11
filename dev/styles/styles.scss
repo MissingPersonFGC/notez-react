@@ -467,8 +467,7 @@ footer {
 /* The switch - the box around the slider */
 .toggle-container {
   display: flex;
-  margin: 0 auto;
-  width: 30%;
+  justify-content: center;
 
   .game-toggle-label, .toggle {
     margin-right: 10px;
