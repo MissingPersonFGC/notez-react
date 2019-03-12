@@ -37,6 +37,7 @@ class PlayerNotes extends React.Component {
         this.changeQuickAddFilter = this.changeQuickAddFilter.bind(this);
         this.changeQuickAddNote = this.changeQuickAddNote.bind(this);
         this.quickAddNote = this.quickAddNote.bind(this);
+        this.openNoteEditor = this.openNoteEditor.bind(this);
     }
     
     componentDidMount() {
@@ -190,6 +191,24 @@ class PlayerNotes extends React.Component {
         });
     }
 
+    openNoteEditor(key) {
+        const editKey = key;
+        const you = this.state.userName;
+        const game = this.state.selectedGame;
+        const opponent = this.state.opponent;
+        let noteEdited = '';
+        this.dbRefEditNote = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/${editKey}`);
+        this.dbRefEditNote.on('value', (snapshot) => {
+            noteEdited = snapshot.val();
+            this.setState({
+                editKey: editKey,
+                editFilter: noteEdited.noteType,
+                editNote: noteEdited.note,
+                showEdit: true
+            });
+        });
+    }
+
     render() {
         return(
             <main>
@@ -232,7 +251,7 @@ class PlayerNotes extends React.Component {
                             this.state.playerNotes.map((note, index) => {
                                 return <PopulateNotes yourCharacter={this.state.userName} oppCharacter={this.state.opponent} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.playerNotes[index].key} 
                                 removeNote={this.removeNote} 
-                                // openNoteEditor={this.openNoteEditor} 
+                                openNoteEditor={this.openNoteEditor} 
                                 itemID={this.state.playerNotes[index].key} />
                             })
                         : null}
