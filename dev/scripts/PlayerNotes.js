@@ -33,6 +33,7 @@ class PlayerNotes extends React.Component {
         this.pullGames = this.pullGames.bind(this);
         this.pullNotes = this.pullNotes.bind(this);
         this.removeNote = this.removeNote.bind(this);
+        this.setFilter = this.setFilter.bind(this);
     }
     
     componentDidMount() {
@@ -131,14 +132,20 @@ class PlayerNotes extends React.Component {
     }
 
     removeNote(itemToRemove) {
-        const yourGame = this.state.selectedGame;
-        const yourChar = this.state.yourCharacter;
-        const oppChar = this.state.oppCharacter;
+        const game = this.state.selectedGame;
+        const opponent = this.state.opponent;
         const you = this.state.userName;
-        this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
+        this.dbRefGameNotes = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/`);
         this.dbRefGameNotes.child(itemToRemove).once('value', (snapshot) => {
             this.dbRefGameNotes.child(itemToRemove).remove();
         })
+    }
+
+    setFilter(e) {
+        const filter = e.target.value;
+        this.setState({
+            chosenFilter: filter
+        });
     }
 
     render() {
