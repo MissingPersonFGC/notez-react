@@ -45,6 +45,9 @@ class PlayerNotes extends React.Component {
 
             this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
 
+            this.dbRefFilters = firebase.database().ref(`playerFilters/`);
+            
+
             this.dbRefUser.on("value", snapshot => {
                 const value = snapshot.val();
                 for (let user in value) {
@@ -63,9 +66,15 @@ class PlayerNotes extends React.Component {
                             playerList.push(name);
                         }
 
-                        this.setState({
-                            playerData: playerList
+                        this.dbRefFilters.on('value', (snapshot) => {
+                            const filters = snapshot.val();
+                            this.setState({
+                                filterData: filters,
+                                playerData: playerList
+                            });
                         });
+
+                        
                     });
                 }
             });
