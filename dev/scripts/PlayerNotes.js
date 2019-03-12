@@ -72,9 +72,7 @@ class PlayerNotes extends React.Component {
                                 filterData: filters,
                                 playerData: playerList
                             });
-                        });
-
-                        
+                        }); 
                     });
                 }
             });
@@ -165,6 +163,17 @@ class PlayerNotes extends React.Component {
                         <option key="empty" value="" disabled>------</option>
                         {this.state.gameData.map((game, index) => {
                             return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
+                        })}
+                    </select>
+                </section>
+                <section className="selection-head">
+                    <h2>Filter notes by:</h2>
+                </section>
+                <section className="game-select">
+                    <select defaultValue="" onChange={this.setFilter}>
+                        <option key="empty" value="" disabled>------</option>
+                        {this.state.filterData.map((filter, index) => {
+                            return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                         })}
                     </select>
                 </section>
