@@ -23,10 +23,9 @@ class AddPlayerNotes extends React.Component {
         }
 
         this.pullGames = this.pullGames.bind(this);
-        this.setYourChar = this.setYourChar.bind(this);
-        this.setOppChar = this.setOppChar.bind(this);
         this.setFilter = this.setFilter.bind(this);
         this.setNote = this.setNote.bind(this);
+        this.setGame = this.setGame.bind(this);
         this.addNote = this.addNote.bind(this);
         this.setNewPlayer = this.setNewPlayer.bind(this);
         this.addPlayer = this.addPlayer.bind(this);
@@ -80,6 +79,13 @@ class AddPlayerNotes extends React.Component {
         this.unsubscribe();
     }
 
+    setGame(e) {
+        const game = e.target.value;
+        this.setState({
+            yourGame: game
+        });
+    }
+
     pullGames(e) {
         const opponent = e.target.value;
         const you = this.state.userName;
@@ -102,20 +108,6 @@ class AddPlayerNotes extends React.Component {
         });
     }
 
-    setYourChar(e) {
-        const yourChar = e.target.value;
-        this.setState({
-            yourCharacter: yourChar
-        });
-    }
-
-    setOppChar(e) {
-        const oppChar = e.target.value;
-        this.setState({
-            oppCharacter: oppChar
-        });
-    }
-
     setFilter(e) {
         const selectedFilter = e.target.value;
         this.setState({
@@ -133,11 +125,10 @@ class AddPlayerNotes extends React.Component {
     addNote(e) {
         e.preventDefault();
         const game = this.state.yourGame;
-        const you = this.state.yourCharacter;
-        const opponent = this.state.oppCharacter;
+        const you = this.state.userName;
+        const opponent = this.state.opponent;
         const filter = this.state.noteType;
         const note = this.state.noteContent;
-        const user = this.state.userName;
         let filterLong = '';
         this.state.filterData.forEach((theFilters) => {
             if (theFilters.noteShorthand === filter) {
@@ -149,7 +140,7 @@ class AddPlayerNotes extends React.Component {
             "noteLongform": filterLong,
             "noteType": filter
         };
-        this.dbRefNotesLocation = firebase.database().ref(`userData/${user}/gameNotes/${game}/${you}/${opponent}/`);
+        this.dbRefNotesLocation = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/`);
         
         this.dbRefNotesLocation.push(noteFormatted);
 
@@ -191,7 +182,7 @@ class AddPlayerNotes extends React.Component {
                             return <PopulatePlayers playerName={player} key={index} />
                         })}
                     </select>
-                    <p>New player?</p>
+                    <h4>New opponent?</h4>
                     <input type="text" onChange={this.setNewPlayer} value={this.state.newPlayer}></input> <a href="" className="notes-add-submit button" onClick={this.addPlayer}><i className="far fa-plus-square"></i> Add Player</a>
                 </div>
                 <div className="add-notes-matchup">
@@ -206,8 +197,8 @@ class AddPlayerNotes extends React.Component {
                 <div className="add-notes-type">
                     <h4>Type of Note:</h4>
 
-                    <select className="note-type" name="noteType" onChange={this.setFilter}>
-                        <option value="" disabled selected>--Note type--</option>
+                    <select className="note-type"  value={this.state.noteType} name="noteType" onChange={this.setFilter}>
+                        <option value="" disabled selected>------</option>
                         {this.state.filterData.map((filter, index) => {
                             return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                         })}
