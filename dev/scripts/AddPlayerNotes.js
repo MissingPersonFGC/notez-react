@@ -81,7 +81,25 @@ class AddPlayerNotes extends React.Component {
     }
 
     pullGames(e) {
+        const opponent = e.target.value;
+        const you = this.state.userName;
+        this.dbRefAllGames = firebase.database().ref('gameData/');
+        this.dbRefAllGames.on('value', (snapshot) => {
+            const unusedGames = snapshot.val();
 
+            this.dbRefPlayersGames = firebase.database().ref(`userData/${you}/playerNotes/${opponent}`);
+            this.dbRefPlayersGames.on('value', (snapshot) => {
+                const rawGames = snapshot.val();
+                for (let item in rawGames) {
+                    const index = unusedGames.findIndex(g => g.gameShorthand == item);
+                    unusedGames.splice(index, 1);
+                }
+                this.setState({
+                    opponent: opponent,
+                    gameData: unusedGames
+                });
+            });
+        });
     }
 
     setYourChar(e) {
@@ -151,9 +169,14 @@ class AddPlayerNotes extends React.Component {
         e.preventDefault();
         const player = this.state.newPlayer;
         this.state.playerData.push(player);
-        this.setState({
-            opponent: player,
-            newPlayer: ''
+        this.dbRefAllGames = firebase.database().ref('gameData/');
+        this.dbRefAllGames.on('value', (snapshot) => {
+            const games = snapshot.val();
+            this.setState({
+                opponent: player,
+                newPlayer: '',
+                gameData: games
+            });
         });
     }
 
