@@ -38,6 +38,10 @@ class PlayerNotes extends React.Component {
         this.changeQuickAddNote = this.changeQuickAddNote.bind(this);
         this.quickAddNote = this.quickAddNote.bind(this);
         this.openNoteEditor = this.openNoteEditor.bind(this);
+        this.changeEditFilter = this.changeEditFilter.bind(this);
+        this.changeEditNote = this.changeEditNote.bind(this);
+        this.postEdit = this.postEdit.bind(this);
+        this.cancelEdit = this.cancelEdit.bind(this);
     }
     
     componentDidMount() {
@@ -206,6 +210,58 @@ class PlayerNotes extends React.Component {
                 editNote: noteEdited.note,
                 showEdit: true
             });
+        });
+    }
+
+    changeEditFilter(e) {
+        const newFilter = e.target.value;
+        this.setState({
+            editFilter: newFilter
+        });
+    }
+
+    changeEditNote(e) {
+        const newNote = e.target.value;
+        this.setState({
+            editNote: newNote
+        });
+    }
+
+    postEdit(e) {
+        e.preventDefault();
+        const editKey = this.state.editKey;
+        const you = this.state.userName;
+        const game = this.state.selectedGame;
+        const opponent = this.state.opponent;
+        const filterShort = this.state.editFilter;
+        const newNote = this.state.editNote;
+        let filterLong = '';
+        this.state.filterData.forEach((filter) => {
+            if (filter.noteShorthand === filterShort) {
+                filterLong = filter.noteType;
+            }
+        });
+        const noteFormatted = {
+            "note": newNote,
+            "noteType": filterShort,
+            "noteLongform": filterLong
+        }
+        this.dbRefEditNote = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/${editKey}`);
+        this.dbRefEditNote.set(noteFormatted);
+        this.setState({
+            editFilter: '',
+            editKey: '',
+            editNote: '',
+            showEdit: false
+        });
+    }
+
+    cancelEdit() {
+        this.setState({
+            editFilter: '',
+            editKey: '',
+            editNote: '',
+            showEdit: false
         });
     }
 
