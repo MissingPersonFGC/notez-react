@@ -112,6 +112,10 @@ class PlayerNotes extends React.Component {
             this.dbRefNotes = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/`);
             this.dbRefNotes.on('value', (snapshot) => {
                 const notes = snapshot.val();
+                notes.forEach((item, index) => {
+                    item.index = index;
+                }) 
+                console.log(notes);
                 this.setState({
                     selectedGame: game,
                     playerNotes: notes
@@ -144,6 +148,10 @@ class PlayerNotes extends React.Component {
                             return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
                         })}
                     </select>
+                </section>
+                <section className="char-notes">
+                    <ul>
+                    </ul>
                 </section>
             </main>
         )
