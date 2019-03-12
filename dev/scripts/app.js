@@ -7,6 +7,7 @@ import Register from './Register';
 import Login from './Login';
 import FindNotes from './FindNotes';
 import AddNotes from './AddNotes';
+import AddPlayerNotes from './AddPlayerNotes';
 
 // Initialize Firebase
 const config = {
@@ -62,6 +63,7 @@ class App extends React.Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/add" component={AddNotes} />
+          <Route exact path="/add-player" commponent={AddPlayerNotes} />
           <Footer />
         </div>
       </Router>
