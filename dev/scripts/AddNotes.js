@@ -44,16 +44,13 @@ class AddNotes extends React.Component {
                 const value = snapshot.val();
                 for (let user in value) {
                     getUserName = value[user];
-                    console.log(getUserName);
                     this.dbRefGames = firebase.database().ref(`gameData/`);
                     this.dbRefGames.on('value', (snapshot2) => {
                         const unusedGames = snapshot2.val();
-                        console.log(unusedGames);
 
                         this.dbRefYourGames = firebase.database().ref(`userData/${getUserName}/gameNotes`)
                         this.dbRefYourGames.on('value', (snapshot3) => {
                             const yourGames = snapshot3.val();
-                            console.log(yourGames);
                             for (let game in yourGames) {
                                 const index = unusedGames.findIndex(g => 
                                     g.gameShorthand == game

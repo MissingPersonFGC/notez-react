@@ -20,6 +20,7 @@ class PlayerNotes extends React.Component {
             playerNotes: [],
             playerData: [],
             filterData: [],
+            gameData: [],
             opponent: '',
             selectedGame: '',
             chosenFilter: '',
@@ -75,6 +76,7 @@ class PlayerNotes extends React.Component {
         const user = this.state.userName;
         this.dbRefGamesInNotes = firebase.database().ref(`userData/${user}/playerNotes/${chosenPlayer}/`);
         const gamesInPlayerNotes = [];
+        const availableGames = [];
         this.dbRefGamesInNotes.on('value', (snapshot) => {
             const arr = snapshot.val();
             for (let game in arr) {
@@ -82,9 +84,19 @@ class PlayerNotes extends React.Component {
             }
             this.dbRefGamesList = firebase.database().ref(`gameData/`);
             this.dbRefGamesList.on('value', (snapshot) => {
-                
+                const games = snapshot.val();
+                gamesInPlayerNotes.forEach((game) => {
+                    for (let object in games) {
+                        if (games[object].gameShorthand === game) {
+                            availableGames.push(games[object]);
+                        }
+                    }
+                });
+                this.setState({
+                    gameData: availableGames
+                });
             });
-        })
+        });
     }
 
     render() {
