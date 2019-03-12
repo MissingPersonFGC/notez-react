@@ -34,6 +34,9 @@ class PlayerNotes extends React.Component {
         this.pullNotes = this.pullNotes.bind(this);
         this.removeNote = this.removeNote.bind(this);
         this.setFilter = this.setFilter.bind(this);
+        this.changeQuickAddFilter = this.changeQuickAddFilter.bind(this);
+        this.changeQuickAddNote = this.changeQuickAddNote.bind(this);
+        this.quickAddNote = this.quickAddNote.bind(this);
     }
     
     componentDidMount() {
@@ -148,6 +151,45 @@ class PlayerNotes extends React.Component {
         });
     }
 
+    changeQuickAddFilter(e) {
+        const quickAddFilter = e.target.value;
+        this.setState({
+            quickAddFilter: quickAddFilter
+        });
+    }
+
+    changeQuickAddNote(e) {
+        const newNote = e.target.value;
+        this.setState({
+            quickAddNote: newNote
+        });
+    }
+
+    quickAddNote(e) {
+        e.preventDefault();
+        const game = this.state.selectedGame;
+        const you = this.state.userName;
+        const opponent = this.state.opponent;
+        const filterShort = this.state.quickAddFilter;
+        const newNote = this.state.quickAddNote;
+        let filterLong = '';
+        this.state.filterData.forEach((filter) => {
+            if (filter.noteShorthand === filterShort) {
+                filterLong = filter.noteType;
+            }
+        });
+        const noteFormatted = {
+            "note": newNote,
+            "noteType": filterShort,
+            "noteLongform": filterLong
+        }
+        this.dbRefNotesLocation = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/`);
+        this.dbRefNotesLocation.push(noteFormatted);
+        this.setState({
+            quickAddNote: ''
+        });
+    }
+
     render() {
         return(
             <main>
@@ -208,6 +250,9 @@ class PlayerNotes extends React.Component {
                             </li> : null
                         }
                     </ul>
+                </section>
+                <section className="notes-add">
+                    <Link to="/add-player" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Player/Game</Link>
                 </section>
             </main>
         )
