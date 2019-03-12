@@ -43,6 +43,7 @@ class PlayerNotes extends React.Component {
         this.postEdit = this.postEdit.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
         this.filterNotes = this.filterNotes.bind(this);
+        this.resetNotes = this.resetNotes.bind(this);
     }
     
     componentDidMount() {
@@ -211,6 +212,26 @@ class PlayerNotes extends React.Component {
         });
     }
 
+    resetNotes(e) {
+        e.preventDefault();
+        const you = this.state.userName;
+        const opponent = this.state.opponent;
+        const game = this.state.selectedGame;
+        this.dbRefNotes = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/`);
+        this.dbRefNotes.on('value', (snapshot) => {
+            const unparsedNotes = snapshot.val();
+            const parsedNotes = [];
+            for (let item in unparsedNotes) {
+                unparsedNotes[item].key = item;
+                parsedNotes.push(unparsedNotes[item]);
+            }
+            this.setState({
+                selectedGame: game,
+                playerNotes: parsedNotes
+            });
+        });
+    }
+
     openNoteEditor(key) {
         const editKey = key;
         const you = this.state.userName;
@@ -316,7 +337,7 @@ class PlayerNotes extends React.Component {
                             return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                         })}
                     </select>
-                    <a href="" className="button filter desktop" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
+                    <a href="" className="button filter desktop" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a> <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                 </section>
                 <section className="char-notes">
                     <ul>
