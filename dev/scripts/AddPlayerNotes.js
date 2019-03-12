@@ -11,93 +11,77 @@ class AddPlayerNotes extends React.Component {
         super();
         this.state = {
             gameData: [],
-            characterData: [],
+            playerData: [],
             filterData: [],
             yourGame: '',
-            yourCharacter: '',
-            oppCharacter: '',
+            opponent: '',
             noteType: '',
             noteContent: '',
             userName: '',
             userId: '',
-            length: ''
+            newPlayer: ''
         }
 
-        this.pullCharactersAndFilters = this.pullCharactersAndFilters.bind(this);
+        this.pullGames = this.pullGames.bind(this);
         this.setYourChar = this.setYourChar.bind(this);
         this.setOppChar = this.setOppChar.bind(this);
         this.setFilter = this.setFilter.bind(this);
         this.setNote = this.setNote.bind(this);
         this.addNote = this.addNote.bind(this);
+        this.setNewPlayer = this.setNewPlayer.bind(this);
+        this.addPlayer = this.addPlayer.bind(this);
     }
 
     componentDidMount() {
-        let getUserName = '';
-        firebase.auth().onAuthStateChanged(user => {
+        this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
+
             this.setState({
-                userId: user.uid
+                userId: user.uid,
+                loggedIn: true
             });
 
             this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
 
+            this.dbRefFilters = firebase.database().ref(`playerFilters/`);
+            
+
             this.dbRefUser.on("value", snapshot => {
                 const value = snapshot.val();
                 for (let user in value) {
-                    getUserName = value[user];
-                    this.dbRefGames = firebase.database().ref(`gameData/`);
-                    this.dbRefGames.on('value', (snapshot2) => {
-                        const unusedGames = snapshot2.val();
+                    const getUserName = value[user];
+                    this.setState({
+                        userName: getUserName
+                    });
 
-                        this.dbRefYourGames = firebase.database().ref(`userData/${getUserName}/gameNotes`)
-                        this.dbRefYourGames.on('value', (snapshot3) => {
-                            const yourGames = snapshot3.val();
-                            for (let game in yourGames) {
-                                const index = unusedGames.findIndex(g => 
-                                    g.gameShorthand == game
-                                );
-                                unusedGames.splice(index, 1);
-                            }
+                    this.dbRefAvailablePlayers = firebase.database().ref(`userData/${getUserName}/playerNotes/`);
+
+                    this.dbRefAvailablePlayers.on('value', (snapshot) => {
+                        const playersDb = snapshot.val();
+                        const playerList = []
+
+                        for (let name in playersDb) {
+                            playerList.push(name);
+                        }
+
+                        this.dbRefFilters.on('value', (snapshot) => {
+                            const filters = snapshot.val();
                             this.setState({
-                                userName: getUserName,
-                                gameData: unusedGames
+                                filterData: filters,
+                                playerData: playerList
                             });
-                        });
+                        }); 
                     });
                 }
             });
         });
     }
 
-    pullCharactersAndFilters(e) {
-        const yourFilters = [];
-        const selectedGame = e.target.value;
-        let characterData = [];
-        this.dbRefCharacters = firebase.database().ref(`characterData/${selectedGame}/`);
-        this.dbRefCharacters.on("value", snapshot => {
-            characterData = snapshot.val();
-        });
-        const yourGame = selectedGame;
-        this.dbRefFilterGameSpecific = firebase.database().ref(`punishData/${yourGame}/`);
-        this.dbRefFilterGlobal = firebase.database().ref(`punishData/global/`);
-        this.dbRefFilterGlobal.on("value", snapshot => {
-            const filters = snapshot.val();
-            filters.forEach((filter) => {
-                yourFilters.push(filter);
-            });
-        });
-        this.dbRefFilterGameSpecific.on("value", snapshot => {
-            const filters = snapshot.val();
-            if (filters !== null) {
-                filters.forEach((filter) => {
-                    yourFilters.push(filter);
-                });
-            }
-            this.setState({
-                filterData: yourFilters,
-                yourGame: selectedGame,
-                characterData: characterData
-            });
-        });
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
+
+    pullGames(e) {
+
     }
 
     setYourChar(e) {
@@ -156,33 +140,43 @@ class AddPlayerNotes extends React.Component {
         })
     }
 
+    setNewPlayer(e) {
+        const player = e.target.value;
+        this.setState({
+            newPlayer: player
+        });
+    }
+
+    addPlayer(e) {
+        e.preventDefault();
+        const player = this.state.newPlayer;
+        this.state.playerData.push(player);
+        this.setState({
+            opponent: player,
+            newPlayer: ''
+        });
+    }
+
     render() {
         return(
             <div className="add-notes-popup">
                 <div className="add-notes-game">
-                    <h4>Game:</h4>
-                    <select className="your-game" name="gameShorthand" defaultValue="" onChange={this.pullCharactersAndFilters}>
-                        <option value="" disabled>--Select your game--</option>
-                        {this.state.gameData.map((game, index) => {
-                            return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
+                    <h4>Opponent:</h4>
+                    <select className="your-game" name="gameShorthand" value={this.state.opponent} onChange={this.pullGames}>
+                        <option value="" disabled>------</option>
+                        {this.state.playerData.map((player, index) => {
+                            return <PopulatePlayers playerName={player} key={index} />
                         })}
                     </select>
+                    <p>New player?</p>
+                    <input type="text" onChange={this.setNewPlayer} value={this.state.newPlayer}></input> <a href="" className="notes-add-submit button" onClick={this.addPlayer}><i className="far fa-plus-square"></i> Add Player</a>
                 </div>
                 <div className="add-notes-matchup">
-                    <h4>Matchup:</h4>
-                    <select className="your-character" name="yourCharacter" onChange={this.setYourChar}>
-                        <option value="" disabled selected>--Your character--</option>
-                        {this.state.characterData.map((character, index) => {
-                            return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
-                        })}
-                    </select>
-
-                    vs.
-
-                    <select className="opp-character" name="opponentCharacter" onChange={this.setOppChar}>
-                        <option value="" disabled selected>--Their character--</option>
-                        {this.state.characterData.map((character, index) => {
-                            return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
+                    <h4>Game:</h4>
+                    <select className="your-character" name="yourCharacter" onChange={this.setGame} value={this.state.yourGame}>
+                        <option value="" disabled selected>------</option>
+                        {this.state.gameData.map((game, index) => {
+                            return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
                         })}
                     </select>
                 </div>

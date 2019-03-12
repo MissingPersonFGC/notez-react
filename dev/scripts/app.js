@@ -63,7 +63,7 @@ class App extends React.Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/add" component={AddNotes} />
-          <Route exact path="/add-player" commponent={AddPlayerNotes} />
+          <Route exact path="/add-player" component={AddPlayerNotes} />
           <Footer />
         </div>
       </Router>
