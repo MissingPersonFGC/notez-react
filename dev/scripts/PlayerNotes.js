@@ -32,6 +32,7 @@ class PlayerNotes extends React.Component {
             editNote: ''
         }
         this.pullGames = this.pullGames.bind(this);
+        this.pullNotes = this.pullNotes.bind(this);
     }
     
     componentDidMount() {
@@ -93,10 +94,30 @@ class PlayerNotes extends React.Component {
                     }
                 });
                 this.setState({
-                    gameData: availableGames
+                    gameData: availableGames,
+                    opponent: chosenPlayer
                 });
             });
         });
+    }
+
+    pullNotes(e) {
+        const game = e.target.value;
+        const opponent = this.state.opponent;
+        const you = this.state.userName;
+
+        console.log(game, opponent, you);
+
+        if (game !== '' && opponent !== '') {
+            this.dbRefNotes = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/`);
+            this.dbRefNotes.on('value', (snapshot) => {
+                const notes = snapshot.val();
+                this.setState({
+                    selectedGame: game,
+                    playerNotes: notes
+                });
+            });
+        }
     }
 
     render() {
@@ -117,7 +138,7 @@ class PlayerNotes extends React.Component {
                     <h2>Select your game:</h2>
                 </section>
                 <section className="game-select">
-                    <select defaultValue="" onChange={this.pullGames}>
+                    <select defaultValue="" onChange={this.pullNotes}>
                         <option key="empty" value="" disabled>------</option>
                         {this.state.gameData.map((game, index) => {
                             return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
