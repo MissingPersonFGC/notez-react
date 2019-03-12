@@ -113,6 +113,17 @@ class PlayerNotes extends React.Component {
                         })}
                     </select>
                 </section>
+                <section className="selection-head">
+                    <h2>Select your game:</h2>
+                </section>
+                <section className="game-select">
+                    <select defaultValue="" onChange={this.pullGames}>
+                        <option key="empty" value="" disabled>------</option>
+                        {this.state.gameData.map((game, index) => {
+                            return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
+                        })}
+                    </select>
+                </section>
             </main>
         )
     }
