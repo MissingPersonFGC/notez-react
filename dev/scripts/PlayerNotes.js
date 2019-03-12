@@ -194,6 +194,19 @@ class PlayerNotes extends React.Component {
                                 itemID={this.state.playerNotes[index].key} />
                             })
                         : null}
+                        {this.state.playerNotes.length !== 0 ? 
+                            <li className="note-qa-li">
+                                <span className="note-type quick-add">Quick Add:</span>
+                                <select name="note-filter" className="note-filter qa-note-filter" onChange={this.changeQuickAddFilter}>
+                                    <option value="">------</option>
+                                    {this.state.filterData.map((filter, index) => {
+                                        return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                    })}
+                                </select>
+                                <input type="text" name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this player here." value={this.state.quickAddNote}></input>
+                                <a href="#" onClick={this.quickAddNote} className="button">Add Note</a>
+                            </li> : null
+                        }
                     </ul>
                 </section>
             </main>
