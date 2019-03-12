@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import firebase from 'firebase';
-import PopulateGames from './PopulateGames';
-import PopulateCharacters from './PopulateCharacters';
+import PopulateGames from './PopulateGames'
 import PopulateNotes from './PopulateNotes';
 import PopulateFilters from './PopulateFilters';
 import Modal from 'react-bootstrap/Modal';
@@ -33,6 +32,7 @@ class PlayerNotes extends React.Component {
         }
         this.pullGames = this.pullGames.bind(this);
         this.pullNotes = this.pullNotes.bind(this);
+        this.removeNote = this.removeNote.bind(this);
     }
     
     componentDidMount() {
@@ -106,22 +106,32 @@ class PlayerNotes extends React.Component {
         const opponent = this.state.opponent;
         const you = this.state.userName;
 
-        console.log(game, opponent, you);
-
         if (game !== '' && opponent !== '') {
             this.dbRefNotes = firebase.database().ref(`userData/${you}/playerNotes/${opponent}/${game}/`);
             this.dbRefNotes.on('value', (snapshot) => {
-                const notes = snapshot.val();
-                notes.forEach((item, index) => {
-                    item.index = index;
-                }) 
-                console.log(notes);
+                const unparsedNotes = snapshot.val();
+                const parsedNotes = [];
+                for (let item in unparsedNotes) {
+                    unparsedNotes[item].key = item;
+                    parsedNotes.push(unparsedNotes[item]);
+                }
                 this.setState({
                     selectedGame: game,
-                    playerNotes: notes
+                    playerNotes: parsedNotes
                 });
             });
         }
+    }
+
+    removeNote(itemToRemove) {
+        const yourGame = this.state.selectedGame;
+        const yourChar = this.state.yourCharacter;
+        const oppChar = this.state.oppCharacter;
+        const you = this.state.userName;
+        this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
+        this.dbRefGameNotes.child(itemToRemove).once('value', (snapshot) => {
+            this.dbRefGameNotes.child(itemToRemove).remove();
+        })
     }
 
     render() {
@@ -151,6 +161,14 @@ class PlayerNotes extends React.Component {
                 </section>
                 <section className="char-notes">
                     <ul>
+                        {this.state.playerNotes !== null ? 
+                            this.state.playerNotes.map((note, index) => {
+                                return <PopulateNotes yourCharacter={this.state.userName} oppCharacter={this.state.opponent} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.playerNotes[index].key} 
+                                removeNote={this.removeNote} 
+                                // openNoteEditor={this.openNoteEditor} 
+                                itemID={this.state.playerNotes[index].key} />
+                            })
+                        : null}
                     </ul>
                 </section>
             </main>
