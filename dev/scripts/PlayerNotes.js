@@ -369,24 +369,6 @@ class PlayerNotes extends React.Component {
                         <section className="notes-add">
                             <Link to="/add-player" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Player/Game</Link>
                         </section>
-                        <Modal show={this.state.showEdit} onHide={this.cancelEdit}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Edit existing note</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <p>
-                                    <span className="note-type">Change Filter:</span> <select name="change-filter" onChange={this.changeEditFilter} value={this.state.editFilter}>
-                                        {this.state.filterData.map((filter, index) => {
-                                            return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                        })}
-                                    </select> 
-                                </p>
-                                <p><span className="note-type">Change Note:</span></p>
-                                <textarea rows="2" cols="40" onChange={this.changeEditNote} value={this.state.editNote}></textarea>
-                                <a className="button-edit-submit" href="#" onClick={this.postEdit}>Edit Note</a>
-                                <a href="#" onClick={this.cancelEdit}>Cancel</a>
-                            </Modal.Body>
-                        </Modal>
                     </div>
                 :
                     <section className="no-notes">
@@ -396,6 +378,24 @@ class PlayerNotes extends React.Component {
                 <section className="notes-add">
                     <Link to="/add-player" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Player/Game</Link>
                 </section>
+                <Modal show={this.state.showEdit} onHide={this.cancelEdit}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit existing note</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>
+                            <span className="note-type">Change Filter:</span> <select name="change-filter" onChange={this.changeEditFilter} value={this.state.editFilter}>
+                                {this.state.filterData.map((filter, index) => {
+                                    return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                })}
+                            </select> 
+                        </p>
+                        <p><span className="note-type">Change Note:</span></p>
+                        <textarea rows="2" cols="40" onChange={this.changeEditNote} value={this.state.editNote}></textarea>
+                        <a className="button-edit-submit" href="#" onClick={this.postEdit}>Edit Note</a>
+                        <a href="#" onClick={this.cancelEdit}>Cancel</a>
+                    </Modal.Body>
+                </Modal>
             </main>
         )
     }

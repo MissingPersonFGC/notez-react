@@ -240,7 +240,8 @@ class GameNotes extends React.Component {
                         note: 'You have no notes for this match.'
                     });
                     this.setState({
-                        gameNotes: parsedNotes
+                        gameNotes: parsedNotes,
+                        yourCharacter: yourChar
                     });
                 }
             });
@@ -276,7 +277,8 @@ class GameNotes extends React.Component {
                         note: 'You have no notes for this match.'
                     });
                     this.setState({
-                        gameNotes: parsedNotes
+                        gameNotes: parsedNotes,
+                        oppCharacter: oppChar
                     });
                 }
             });
