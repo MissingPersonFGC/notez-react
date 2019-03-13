@@ -217,16 +217,74 @@ class GameNotes extends React.Component {
 
     setYourChar(e) {
         const yourChar = e.target.value;
-        this.setState({
-            yourCharacter: yourChar
-        });
+        const oppChar = this.state.oppCharacter;
+        if (yourChar !== '' && oppChar !== '') {
+            const you = this.state.userName;
+            const yourGame = this.state.selectedGame;
+            this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
+            this.dbRefGameNotes.on("value", snapshot => {
+                const unparsedNotes = snapshot.val();
+                const parsedNotes = [];
+
+                if (snapshot.val()) {
+                    for (let item in unparsedNotes) {
+                        unparsedNotes[item].key = item;
+                        parsedNotes.push(unparsedNotes[item]);
+                    }
+                    this.setState({
+                        gameNotes: parsedNotes
+                    });
+                } else {
+                    parsedNotes.push({
+                        noteLongform: 'Alert',
+                        note: 'You have no notes for this match.'
+                    });
+                    this.setState({
+                        gameNotes: parsedNotes
+                    });
+                }
+            });
+        } else {
+            this.setState({
+                yourCharacter: yourChar
+            });
+        }
     }
 
     setOppChar(e) {
         const oppChar = e.target.value;
-        this.setState({
-            oppCharacter: oppChar
-        });
+        const yourChar = this.state.yourCharacter;
+        if (oppChar !== '' && yourChar !== '') {
+            const you = this.state.userName;
+            const yourGame = this.state.selectedGame;
+            this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
+            this.dbRefGameNotes.on("value", snapshot => {
+                const unparsedNotes = snapshot.val();
+                const parsedNotes = [];
+
+                if (snapshot.val()) {
+                    for (let item in unparsedNotes) {
+                        unparsedNotes[item].key = item;
+                        parsedNotes.push(unparsedNotes[item]);
+                    }
+                    this.setState({
+                        gameNotes: parsedNotes
+                    });
+                } else {
+                    parsedNotes.push({
+                        noteLongform: 'Alert',
+                        note: 'You have no notes for this match.'
+                    });
+                    this.setState({
+                        gameNotes: parsedNotes
+                    });
+                }
+            });
+        } else {
+            this.setState({
+                oppCharacter: oppChar
+            });
+        }
     }
 
     getGameNotes(e) {
@@ -368,7 +426,7 @@ class GameNotes extends React.Component {
                             </section>
                             <section className="game-select">
                                 <select name="your-game" id="your-game" className="your-game" defaultValue="" onChange={this.pullCharacters}>
-                                    <option key="empty" value="" disabled>--Select your game--</option>
+                                    <option key="empty" value="" disabled>------</option>
                                     {this.state.gameData.map((game, index) => {
                                         return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
                                     })}
@@ -379,31 +437,24 @@ class GameNotes extends React.Component {
                             </section>
                             <section className="char-select clearfix">
                                 <select className="your-character" name="your-character" defaultValue="" onChange={this.setYourChar}>
-                                    <option value="" disabled>--Your character--</option>
+                                    <option value="" disabled>------</option>
                                     {this.state.characterData.map((character, index) => {
                                         return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index} />
                                     })}
                                 </select>
                                 vs.
                                 <select className="opp-character" name="opp-character" defaultValue="" onChange={this.setOppChar}>
-                                    <option value="" disabled>--Their character--</option>
+                                    <option value="" disabled>------</option>
                                     {this.state.characterData.map((character, index) => {
                                         return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
                                     })}
                                 </select>
-
-                                <a href="" className="button show-notes desktop" onClick={this.getGameNotes}><i className="fas fa-eye"></i> Show Notes</a>
-
-                                {/* Create separate button that will display on mobile devices. */}
-                                <div className="button-break">
-                                    <a href="" className="button show-notes mobile" onClick={this.getGameNotes}><i className="fas fa-eye"></i> Show Notes</a>
-                                </div>
                             </section>
                             <section className="char-notes">
                                 <div className="wrapper">
                                 Filter by:
                                 <select className="note-filter" name="note-filter" onChange={this.changeFilter} defaultValue="">
-                                    <option value="" disabled>--Filter by--</option>
+                                    <option value="" disabled>------</option>
                                     {this.state.punishData.map((filter, index) => {
                                         return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                     })}
