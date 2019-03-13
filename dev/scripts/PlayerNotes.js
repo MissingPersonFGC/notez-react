@@ -42,7 +42,6 @@ class PlayerNotes extends React.Component {
         this.changeEditNote = this.changeEditNote.bind(this);
         this.postEdit = this.postEdit.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
-        this.filterNotes = this.filterNotes.bind(this);
         this.resetNotes = this.resetNotes.bind(this);
     }
     
@@ -141,21 +140,6 @@ class PlayerNotes extends React.Component {
         }
     }
 
-    filterNotes(e) {
-        e.preventDefault();
-        const wholeNotes = this.state.playerNotes;
-        const selectedFilter = this.state.chosenFilter;
-        const reducedNotes = [];
-        wholeNotes.forEach((note) => {
-            if (note.noteType === selectedFilter) {
-                reducedNotes.push(note);
-            }
-        });
-        this.setState({
-            playerNotes: reducedNotes
-        });
-    }
-
     removeNote(itemToRemove) {
         const game = this.state.selectedGame;
         const opponent = this.state.opponent;
@@ -168,8 +152,16 @@ class PlayerNotes extends React.Component {
 
     setFilter(e) {
         const filter = e.target.value;
+        const wholeNotes = this.state.playerNotes;
+        const reducedNotes = [];
+        wholeNotes.forEach((note) => {
+            if (note.noteType === filter) {
+                reducedNotes.push(note);
+            }
+        })
         this.setState({
-            chosenFilter: filter
+            chosenFilter: filter,
+            playerNotes: reducedNotes
         });
     }
 
@@ -339,7 +331,7 @@ class PlayerNotes extends React.Component {
                                     return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                 })}
                             </select>
-                            <a href="" className="button filter desktop" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a> <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
+                            <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                         </section>
                         <section className="char-notes">
                             <ul>
@@ -365,9 +357,6 @@ class PlayerNotes extends React.Component {
                                     </li> : null
                                 }
                             </ul>
-                        </section>
-                        <section className="notes-add">
-                            <Link to="/add-player" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Player/Game</Link>
                         </section>
                     </div>
                 :
