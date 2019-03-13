@@ -298,66 +298,70 @@ class PlayerNotes extends React.Component {
         return(
             <main>
                 {this.state.playerData.length > 0 ?
-                    <div>
-                        <section className="selection-head">
-                            <h2>Select your opponent:</h2>
-                        </section>
-                        <section className="game-select">
-                            <select defaultValue="" onChange={this.pullGames}>
-                                <option key="empty" value="" disabled>------</option>
-                                {this.state.playerData.map((player, index) => {
-                                    return <PopulatePlayers playerName={player} key={index} />
-                                })}
-                            </select>
-                        </section>
-                        <section className="selection-head">
-                            <h2>Select your game:</h2>
-                        </section>
-                        <section className="game-select">
-                            <select defaultValue="" onChange={this.pullNotes}>
-                                <option key="empty" value="" disabled>------</option>
-                                {this.state.gameData.map((game, index) => {
-                                    return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
-                                })}
-                            </select>
-                        </section>
-                        <section className="selection-head">
-                            <h2>Filter notes by:</h2>
-                        </section>
-                        <section className="game-select">
-                            <select defaultValue="" onChange={this.setFilter}>
-                                <option key="empty" value="" disabled>------</option>
-                                {this.state.filterData.map((filter, index) => {
-                                    return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                })}
-                            </select>
-                            <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
-                        </section>
-                        <section className="char-notes">
-                            <ul>
-                                {this.state.playerNotes !== null ? 
-                                    this.state.playerNotes.map((note, index) => {
-                                        return <PopulateNotes yourCharacter={this.state.userName} oppCharacter={this.state.opponent} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.playerNotes[index].key} 
-                                        removeNote={this.removeNote} 
-                                        openNoteEditor={this.openNoteEditor} 
-                                        itemID={this.state.playerNotes[index].key} />
-                                    })
-                                : null}
-                                {this.state.playerNotes.length !== 0 ? 
-                                    <li className="note-qa-li">
-                                        <span className="note-type quick-add">Quick Add:</span>
-                                        <select name="note-filter" className="note-filter qa-note-filter" onChange={this.changeQuickAddFilter}>
-                                            <option value="">------</option>
-                                            {this.state.filterData.map((filter, index) => {
-                                                return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                            })}
-                                        </select>
-                                        <input type="text" name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this player here." value={this.state.quickAddNote}></input>
-                                        <a href="#" onClick={this.quickAddNote} className="button">Add Note</a>
-                                    </li> : null
-                                }
-                            </ul>
-                        </section>
+                    <div className="grid-container">
+                        <div className="menu">                        
+                            <section className="selection-head">
+                                <h2>Select your opponent:</h2>
+                            </section>
+                            <section className="game-select">
+                                <select defaultValue="" onChange={this.pullGames}>
+                                    <option key="empty" value="" disabled>------</option>
+                                    {this.state.playerData.map((player, index) => {
+                                        return <PopulatePlayers playerName={player} key={index} />
+                                    })}
+                                </select>
+                            </section>
+                            <section className="selection-head">
+                                <h2>Select your game:</h2>
+                            </section>
+                            <section className="game-select">
+                                <select defaultValue="" onChange={this.pullNotes}>
+                                    <option key="empty" value="" disabled>------</option>
+                                    {this.state.gameData.map((game, index) => {
+                                        return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
+                                    })}
+                                </select>
+                            </section>
+                            <section className="selection-head">
+                                <h2>Filter notes by:</h2>
+                            </section>
+                            <section className="game-select">
+                                <select defaultValue="" onChange={this.setFilter}>
+                                    <option key="empty" value="" disabled>------</option>
+                                    {this.state.filterData.map((filter, index) => {
+                                        return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                    })}
+                                </select>
+                                <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
+                            </section>
+                        </div>
+                        <div className="notes">                        
+                            <section className="char-notes">
+                                <ul>
+                                    {this.state.playerNotes !== null ? 
+                                        this.state.playerNotes.map((note, index) => {
+                                            return <PopulateNotes yourCharacter={this.state.userName} oppCharacter={this.state.opponent} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.playerNotes[index].key} 
+                                            removeNote={this.removeNote} 
+                                            openNoteEditor={this.openNoteEditor} 
+                                            itemID={this.state.playerNotes[index].key} />
+                                        })
+                                    : null}
+                                    {this.state.playerNotes.length !== 0 ? 
+                                        <li className="note-qa-li">
+                                            <span className="note-type quick-add">Quick Add:</span>
+                                            <select name="note-filter" className="note-filter qa-note-filter" onChange={this.changeQuickAddFilter}>
+                                                <option value="">------</option>
+                                                {this.state.filterData.map((filter, index) => {
+                                                    return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                                })}
+                                            </select>
+                                            <input type="text" name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this player here." value={this.state.quickAddNote}></input>
+                                            <a href="#" onClick={this.quickAddNote} className="button">Add Note</a>
+                                        </li> : null
+                                    }
+                                </ul>
+                            </section>
+                        </div>
                     </div>
                 :
                     <section className="no-notes">
