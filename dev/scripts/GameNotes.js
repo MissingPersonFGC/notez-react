@@ -36,7 +36,6 @@ class GameNotes extends React.Component {
         this.setOppChar = this.setOppChar.bind(this);
         this.getGameNotes = this.getGameNotes.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
-        this.filterNotes = this.filterNotes.bind(this);
         this.switchBetweenNotes = this.switchBetweenNotes.bind(this);
         this.removeNote = this.removeNote.bind(this);
         this.openNoteEditor = this.openNoteEditor.bind(this);
@@ -350,21 +349,6 @@ class GameNotes extends React.Component {
         this.setState({
             gameNotes: reducedNotes,
             chosenFilter: selectedFilter
-        });
-    }
-
-    filterNotes(e) {
-        e.preventDefault();
-        const wholeNotes = this.state.gameNotes;
-        const selectedFilter = this.state.chosenFilter;
-        const reducedNotes = [];
-        wholeNotes.forEach((note) => {
-            if (note.noteType === selectedFilter) {
-                reducedNotes.push(note);
-            }
-        });
-        this.setState({
-            gameNotes: reducedNotes
         });
     }
 
