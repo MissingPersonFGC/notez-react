@@ -54,15 +54,7 @@ class FindNotes extends React.Component {
         this.setState({
             loggedIn: false,
             userName: "",
-            userId: "",
-            gameData: [],
-            characterData: [],
-            gameNotes: [],
-            punishData: [],
-            selectedGame: "",
-            yourCharacter: "",
-            oppCharacter: "",
-            chosenFilter: ""
+            userId: ""
         });
     }
 
