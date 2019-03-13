@@ -77,4 +77,20 @@
       margin: 5% 0;
     }
   }
+
+  .grid-container {
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr auto;
+
+    .game-select {
+      text-align: center;
+      a {
+        margin-right: 0;
+      }
+    }
+
+    ul {
+      margin-top: 20px;
+    }
+  }
 }
