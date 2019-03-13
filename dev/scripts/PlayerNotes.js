@@ -356,7 +356,7 @@ class PlayerNotes extends React.Component {
                                                 })}
                                             </select>
                                             <input type="text" name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this player here." value={this.state.quickAddNote}></input>
-                                            <a href="#" onClick={this.quickAddNote} className="button">Add Note</a>
+                                            <a href="#" onClick={this.quickAddNote} className="button"><i className="fas fa-pencil-alt"></i></a>
                                         </li> : null
                                     }
                                 </ul>

@@ -32,6 +32,11 @@ body {
   font-size: 16px;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr;
+}
+
 .user-header {
   width: 80%;
   margin: 0 auto;
@@ -277,7 +282,6 @@ main {
 
   .char-select, .game-select {
     @extend .selection-head;
-    text-align: center;
 
     a {
       @include button($color-secondary, $color-main, $font-main);
@@ -290,10 +294,8 @@ main {
       padding: 5px;
       margin-right: 10px;
       font-family: $font-main;
-    }
-
-    .opp-character {
-      margin-left: 10px;
+      width: 50%;
+      margin-left: 10%;
     }
 
     .button-break {
@@ -335,10 +337,6 @@ main {
       }
     }
   }
-}
-
-.char-notes ul {
-  margin-top: 35px;
 }
 
 // Make the Character Notes and filter initially invisible, then make visible on click
