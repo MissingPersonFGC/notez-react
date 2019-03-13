@@ -232,7 +232,8 @@ class GameNotes extends React.Component {
                         parsedNotes.push(unparsedNotes[item]);
                     }
                     this.setState({
-                        gameNotes: parsedNotes
+                        gameNotes: parsedNotes,
+                        yourCharacter: yourChar
                     });
                 } else {
                     parsedNotes.push({
@@ -269,7 +270,8 @@ class GameNotes extends React.Component {
                         parsedNotes.push(unparsedNotes[item]);
                     }
                     this.setState({
-                        gameNotes: parsedNotes
+                        gameNotes: parsedNotes,
+                        oppCharacter: oppChar
                     });
                 } else {
                     parsedNotes.push({
@@ -296,6 +298,8 @@ class GameNotes extends React.Component {
         const oppChar = this.state.oppCharacter;
         const you = this.state.userName;
 
+        console.log(yourChar, oppChar, yourGame, you);
+
         this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
         this.dbRefGameNotes.on("value", snapshot => {
             const unparsedNotes = snapshot.val();
@@ -307,7 +311,8 @@ class GameNotes extends React.Component {
                     parsedNotes.push(unparsedNotes[item]);
                 }
                 this.setState({
-                    gameNotes: parsedNotes
+                    gameNotes: parsedNotes,
+                    chosenFilter: ''
                 });
             } else {
                 parsedNotes.push({
@@ -315,7 +320,8 @@ class GameNotes extends React.Component {
                     note: 'You have no notes for this match.'
                 });
                 this.setState({
-                    gameNotes: parsedNotes
+                    gameNotes: parsedNotes,
+                    chosenFilter: ''
                 });
             }
         });
@@ -334,7 +340,15 @@ class GameNotes extends React.Component {
 
     changeFilter(e) {
         const selectedFilter = e.target.value;
+        const wholeNotes = this.state.gameNotes;
+        const reducedNotes = [];
+        wholeNotes.forEach((note) => {
+            if (note.noteType === selectedFilter) {
+                reducedNotes.push(note);
+            }
+        });
         this.setState({
+            gameNotes: reducedNotes,
             chosenFilter: selectedFilter
         });
     }
@@ -454,21 +468,14 @@ class GameNotes extends React.Component {
                             </section>
                             <section className="char-notes">
                                 <div className="wrapper">
-                                Filter by:
-                                <select className="note-filter" name="note-filter" onChange={this.changeFilter} defaultValue="">
-                                    <option value="" disabled>------</option>
-                                    {this.state.punishData.map((filter, index) => {
-                                        return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                    })}
-                                </select>
-                                <a href="" className="button filter desktop" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
-                                <a href="" className="button show-all desktop" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
-
-                                {/* Create separate buttons that will display on mobile devices. */}
-                                <div className="button-break">
-                                    <a href="" className="button filter mobile" onClick={this.filterNotes}><i className="fas fa-filter"></i> Filter</a>
-                                    <a href="" className="button show-all mobile" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
-                                </div>
+                                    Filter by:
+                                    <select className="note-filter" name="note-filter" onChange={this.changeFilter} value={this.state.chosenFilter} defaultValue=''>
+                                        <option value="" disabled>------</option>
+                                        {this.state.punishData.map((filter, index) => {
+                                            return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                        })}
+                                    </select>
+                                    <a href="" className="button show-all desktop" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                                 </div>
                                 <div className="notes">
                                     <ul>
