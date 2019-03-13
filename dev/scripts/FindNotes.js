@@ -95,7 +95,7 @@ class FindNotes extends React.Component {
                                     <div className="notes-header__user">
                                         <p>Welcome, {this.state.userName}!</p>
                                         <div className="notes-header__user__button">
-                                            <button onClick={this.doLogout}>Sign-out</button>
+                                            <button onClick={this.doLogout}><i className="fas fa-sign-out-alt"></i> Sign-out</button>
                                         </div>
                                     </div>
                                 </div>
