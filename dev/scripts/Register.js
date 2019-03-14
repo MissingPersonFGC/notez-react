@@ -18,7 +18,8 @@ class Register extends React.Component {
             registerPwdVerify: '',
             registerEmail: '',
             characterNotes: [],
-            playerNotes: []
+            playerNotes: [],
+            invalidUserName: false
         }
 
         this.doRegister = this.doRegister.bind(this);
@@ -32,7 +33,7 @@ class Register extends React.Component {
         e.preventDefault();
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         
-        if (this.state.registerUserName !== '') {
+        if (this.state.registerUserName !== '' && this.state.invalidUserName !== false) {
             const userName = this.state.registerUserName;
 
             const verifyEmail = re.test(String(this.state.registerEmail.toLowerCase()));
@@ -91,8 +92,21 @@ class Register extends React.Component {
     }
 
     writeUsername(e) {
-        this.setState({
-            registerUserName: e.target.value
+        const currentName = e.target.value;
+        const dbRefUsers = firebase.database().ref(`users/`);
+        let userNameInUse = false
+        dbRefUsers.on('value', (snapshot) => {
+            const users = snapshot.val();
+            for (let user in users) {
+                if (users[user].userName === currentName) {
+                    userNameInUse = true;
+                }
+            }
+            console.log(userNameInUse);
+            this.setState({
+                registerUserName: currentName,
+                invalidUserName: userNameInUse
+            });
         });
     }
 
@@ -124,6 +138,11 @@ class Register extends React.Component {
                     <form className="user-register">
                         <div>
                             <input type="text" name="username" placeholder="Username" value={this.state.registerUserName} onChange={this.writeUsername} />
+                            {this.state.invalidUserName ?
+                                <p className="alert">This username is already taken.</p>
+                            :
+                                null
+                            }
                         </div>                        
                         <div>
                             <input type="email" name="email" placeholder="Email Address" onChange={this.writeEmail} value={this.state.registerEmail} />
