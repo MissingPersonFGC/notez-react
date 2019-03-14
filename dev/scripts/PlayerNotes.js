@@ -332,7 +332,11 @@ class PlayerNotes extends React.Component {
                                         return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                     })}
                                 </select>
-                                <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
+                                {this.state.playerNotes > 0 ?
+                                    <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
+                                :
+                                    null
+                                }
                             </section>
                             <section className="notes-add">
                                 <Link to="/add-player" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Player/Game</Link>
