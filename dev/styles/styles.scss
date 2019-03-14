@@ -531,8 +531,11 @@ input:checked + .slider:before {
 .note-qa-li {
   margin-top: 25px;
 
-  input[type=text] {
-    width: 40%;
+  textarea {
+    margin-top: 15px;
+    margin-bottom: -15px;
+
+    width: 55%;
     background: $color-secondary;
     color: $color-main;
     font-family: $font-main;
@@ -540,9 +543,12 @@ input:checked + .slider:before {
     border: 1px solid black;
   }
 
-  a {
-    @include button($color-secondary, $color-main, $font-main);
+  select {
+    width: 40%;
+  }
 
+  a {
+    @include button($color-accent, $color-main, $font-main);
     margin-left: 10px;
   }
 }

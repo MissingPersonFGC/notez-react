@@ -467,6 +467,9 @@ class GameNotes extends React.Component {
                                     </select>
                                     <a href="" className="button show-all desktop" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                                 </section>
+                                <section className="notes-add">
+                                    <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Game</Link>
+                                </section>
                             </div>
                             <div className="notes">
                                 <section className="char-notes">
@@ -478,15 +481,19 @@ class GameNotes extends React.Component {
                                         : null}
                                         {this.state.gameNotes.length !== 0 ? 
                                             <li className="note-qa-li">
-                                                <span className="note-type quick-add">Quick Add:</span>
-                                                <select name="note-filter" className="note-filter qa-note-filter" onChange={this.changeQuickAddFilter}>
-                                                    <option value="">--Add Filter--</option>
-                                                    {this.state.punishData.map((filter, index) => {
-                                                        return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                                    })}
-                                                </select>
-                                                <input type="text" name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this matchup here." value={this.state.quickAddNote}></input>
-                                                <a href="#" onClick={this.quickAddNote} className="button"><i className="fas fa-pencil-alt"></i></a>
+                                                <div>
+                                                    <span className="note-type quick-add">Quick Add:</span>
+                                                    <select name="note-filter" className="note-filter qa-note-filter" onChange={this.changeQuickAddFilter}>
+                                                        <option value="">--Add Filter--</option>
+                                                        {this.state.punishData.map((filter, index) => {
+                                                            return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                                        })}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <textarea name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this matchup here." value={this.state.quickAddNote} cols="2"></textarea>
+                                                    <a href="#" onClick={this.quickAddNote} className="button"><i className="fas fa-pencil-alt"></i></a>
+                                                </div>
                                             </li> 
                                             : 
                                             null
@@ -496,13 +503,15 @@ class GameNotes extends React.Component {
                             </div>
                         </div>
                     :
-                    <section className="no-notes">
-                        <h2>It appears that you currently have no notes. Click "Add Notes" below to get started!</h2>
-                    </section>
+                    <div>
+                        <section className="no-notes">
+                            <h2>It appears that you currently have no notes. Click "Add Notes" below to get started!</h2>
+                        </section>
+                        <section className="notes-add">
+                        <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Game</Link>
+                        </section>
+                    </div>
                 }
-                <section className="notes-add">
-                    <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Game</Link>
-                </section>
                 <Modal show={this.state.showEdit} onHide={this.cancelEdit}>
                     <Modal.Header closeButton>
                         <Modal.Title>Edit existing note</Modal.Title>
