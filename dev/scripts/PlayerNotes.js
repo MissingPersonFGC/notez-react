@@ -185,7 +185,6 @@ class PlayerNotes extends React.Component {
         const opponent = this.state.opponent;
         const filterShort = this.state.quickAddFilter;
         const newNote = this.state.quickAddNote;
-        const playerNotes = this.state.playerNotes;
         let filterLong = '';
         this.state.filterData.forEach((filter) => {
             if (filter.noteShorthand === filterShort) {
@@ -332,7 +331,7 @@ class PlayerNotes extends React.Component {
                                         return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                     })}
                                 </select>
-                                {this.state.playerNotes > 0 ?
+                                {this.state.playerNotes.length > 0 ?
                                     <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                                 :
                                     null
