@@ -120,18 +120,18 @@ class FindNotes extends React.Component {
                                             your notes anywhere and add them anytime! Start
                                             leveling up your game today!
                                         </h2>
-                                    </div>
-                                </div>
-                                <div className="login-container">
-                                    <div className="login-button">
-                                        <Link to="/login">
-                                            <i className="fas fa-sign-in-alt" /> Sign-in
-                                        </Link>
-                                    </div>
-                                    <div className="register-button">
-                                        <Link to="/register">
-                                            <i className="fas fa-user-plus"></i> Sign-up
-                                        </Link>
+                                        <div className="login-container">
+                                            <div className="login-button">
+                                                <Link to="/login">
+                                                    <i className="fas fa-sign-in-alt" /> Sign-in
+                                                </Link>
+                                            </div>
+                                            <div className="register-button">
+                                                <Link to="/register">
+                                                    <i className="fas fa-user-plus"></i> Sign-up
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
