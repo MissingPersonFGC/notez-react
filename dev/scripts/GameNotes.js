@@ -59,7 +59,7 @@ class GameNotes extends React.Component {
 
             this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
 
-            this.dbRefUser.on("value", snapshot => {
+            this.dbRefUser.once("value", snapshot => {
                 const value = snapshot.val();
                 for (let user in value) {
                     const getUserName = value[user];
@@ -69,7 +69,8 @@ class GameNotes extends React.Component {
     
                     this.dbRefAvailableGames = firebase.database().ref(`userData/${getUserName}/gameNotes/`);
     
-                    this.dbRefAvailableGames.on("value", snapshot => {
+                    this.dbRefAvailableGames.once("value", snapshot => {
+                        console.log('event fired');
                         const availableGamesInNotes = [];
                         const availableGames = [];
                         const games = snapshot.val();
