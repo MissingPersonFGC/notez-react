@@ -19,7 +19,6 @@ class PlayerNotes extends React.Component {
             playerNotes: [],
             playerData: [],
             filterData: [],
-            gameData: [],
             opponent: '',
             selectedGame: '',
             chosenFilter: '',
@@ -112,9 +111,7 @@ class PlayerNotes extends React.Component {
                 });
                 this.setState({
                     gameData: availableGames,
-                    opponent: chosenPlayer,
-                    selectedGame: '',
-                    playerNotes: []
+                    opponent: chosenPlayer
                 });
             });
         });
@@ -188,6 +185,7 @@ class PlayerNotes extends React.Component {
         const opponent = this.state.opponent;
         const filterShort = this.state.quickAddFilter;
         const newNote = this.state.quickAddNote;
+        const playerNotes = this.state.playerNotes;
         let filterLong = '';
         this.state.filterData.forEach((filter) => {
             if (filter.noteShorthand === filterShort) {
