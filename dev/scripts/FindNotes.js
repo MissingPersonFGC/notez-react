@@ -77,7 +77,7 @@ class FindNotes extends React.Component {
         return(
             <div>
                 {
-                    this.state.loggedIn === true ?                   
+                    this.state.loggedIn ?                   
                         <div>
                             <div className="notes-header">
                                 <div className="container">

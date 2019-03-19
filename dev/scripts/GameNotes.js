@@ -70,7 +70,6 @@ class GameNotes extends React.Component {
                     this.dbRefAvailableGames = firebase.database().ref(`userData/${getUserName}/gameNotes/`);
     
                     this.dbRefAvailableGames.once("value", snapshot => {
-                        console.log('event fired');
                         const availableGamesInNotes = [];
                         const availableGames = [];
                         const games = snapshot.val();
