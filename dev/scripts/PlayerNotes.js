@@ -112,7 +112,9 @@ class PlayerNotes extends React.Component {
                 });
                 this.setState({
                     gameData: availableGames,
-                    opponent: chosenPlayer
+                    opponent: chosenPlayer,
+                    selectedGame: '',
+                    playerNotes: []
                 });
             });
         });
@@ -315,7 +317,7 @@ class PlayerNotes extends React.Component {
                                 <h2>Select your game:</h2>
                             </section>
                             <section className="game-select">
-                                <select defaultValue="" onChange={this.pullNotes}>
+                                <select defaultValue="" onChange={this.pullNotes} value={this.state.selectedGame}>
                                     <option key="empty" value="" disabled>------</option>
                                     {this.state.gameData.map((game, index) => {
                                         return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
