@@ -183,7 +183,11 @@ class GameNotes extends React.Component {
         this.dbRefCharacters.on("value", snapshot => {
             this.setState({
                 selectedGame: selectedGame,
-                characterData: snapshot.val()
+                characterData: snapshot.val(),
+                yourCharacter: '',
+                oppCharacter: '',
+                gameNotes: [],
+                chosenFilter: ''
             });
         });
         this.dbRefFilterGameSpecific = firebase.database().ref(`punishData/${selectedGame}`);
@@ -435,7 +439,7 @@ class GameNotes extends React.Component {
                                     <h2>Select your character:</h2>
                                 </section>
                                 <section className="game-select">
-                                    <select name="your-character" defaultValue="" onChange={this.setYourChar}>
+                                    <select name="your-character" defaultValue="" value={this.state.yourCharacter} onChange={this.setYourChar}>
                                         <option value="" disabled>------</option>
                                         {this.state.characterData.map((character, index) => {
                                             return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index} />
@@ -446,7 +450,7 @@ class GameNotes extends React.Component {
                                     <h2>Select your opponent:</h2>
                                 </section>
                                 <section className="game-select">
-                                    <select name="opp-character" defaultValue="" onChange={this.setOppChar}>
+                                    <select name="opp-character" defaultValue="" value={this.state.oppCharacter} onChange={this.setOppChar}>
                                         <option value="" disabled>------</option>
                                         {this.state.characterData.map((character, index) => {
                                             return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>

@@ -109,10 +109,19 @@ class PlayerNotes extends React.Component {
                         }
                     }
                 });
-                this.setState({
-                    gameData: availableGames,
-                    opponent: chosenPlayer
-                });
+                if (this.state.selectedGame !== '') {
+                    this.setState({
+                        gameData: availableGames,
+                        opponent: chosenPlayer,
+                        selectedGame: '',
+                        playerNotes: []
+                    });
+                } else {
+                    this.setState({
+                        gameData: availableGames,
+                        opponent: chosenPlayer
+                    });
+                }
             });
         });
     }
