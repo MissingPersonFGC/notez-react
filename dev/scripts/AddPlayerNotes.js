@@ -41,7 +41,7 @@ class AddPlayerNotes extends React.Component {
             this.dbRefFilters = firebase.database().ref(`playerFilters/`);
             
 
-            this.dbRefUser.on("value", snapshot => {
+            this.dbRefUser.once("value", snapshot => {
                 const value = snapshot.val();
                 for (let user in value) {
                     const getUserName = value[user];
@@ -88,11 +88,11 @@ class AddPlayerNotes extends React.Component {
         const opponent = e.target.value;
         const you = this.state.userName;
         this.dbRefAllGames = firebase.database().ref('gameData/');
-        this.dbRefAllGames.on('value', (snapshot) => {
+        this.dbRefAllGames.once('value', (snapshot) => {
             const unusedGames = snapshot.val();
 
             this.dbRefPlayersGames = firebase.database().ref(`userData/${you}/playerNotes/${opponent}`);
-            this.dbRefPlayersGames.on('value', (snapshot) => {
+            this.dbRefPlayersGames.once('value', (snapshot) => {
                 const rawGames = snapshot.val();
                 for (let item in rawGames) {
                     const index = unusedGames.findIndex(g => g.gameShorthand == item);

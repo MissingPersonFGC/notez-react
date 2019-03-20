@@ -19,8 +19,7 @@ class AddNotes extends React.Component {
             noteType: '',
             noteContent: '',
             userName: '',
-            userId: '',
-            length: ''
+            userId: ''
         }
 
         this.pullCharactersAndFilters = this.pullCharactersAndFilters.bind(this);
@@ -37,16 +36,16 @@ class AddNotes extends React.Component {
 
             this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
 
-            this.dbRefUser.on("value", snapshot => {
+            this.dbRefUser.once("value", snapshot => {
                 const value = snapshot.val();
                 for (let user in value) {
                     getUserName = value[user];
                     this.dbRefGames = firebase.database().ref(`gameData/`);
-                    this.dbRefGames.on('value', (snapshot2) => {
+                    this.dbRefGames.once('value', (snapshot2) => {
                         const unusedGames = snapshot2.val();
 
                         this.dbRefYourGames = firebase.database().ref(`userData/${getUserName}/gameNotes`)
-                        this.dbRefYourGames.on('value', (snapshot3) => {
+                        this.dbRefYourGames.once('value', (snapshot3) => {
                             const yourGames = snapshot3.val();
                             for (let game in yourGames) {
                                 const index = unusedGames.findIndex(g => 
