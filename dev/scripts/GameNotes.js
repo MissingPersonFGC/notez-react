@@ -34,17 +34,12 @@ class GameNotes extends React.Component {
         this.pullCharacters = this.pullCharacters.bind(this);
         this.setYourChar = this.setYourChar.bind(this);
         this.setOppChar = this.setOppChar.bind(this);
-        this.getGameNotes = this.getGameNotes.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
-        this.switchBetweenNotes = this.switchBetweenNotes.bind(this);
         this.removeNote = this.removeNote.bind(this);
         this.openNoteEditor = this.openNoteEditor.bind(this);
-        this.changeQuickAddNote = this.changeQuickAddNote.bind(this);
-        this.changeQuickAddFilter = this.changeQuickAddFilter.bind(this);
+        this.changeStateValue = this.changeStateValue.bind(this);
         this.quickAddNote = this.quickAddNote.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
-        this.changeEditFilter = this.changeEditFilter.bind(this);
-        this.changeEditNote = this.changeEditNote.bind(this);
         this.postEdit = this.postEdit.bind(this);
     }
 
@@ -137,17 +132,11 @@ class GameNotes extends React.Component {
         });
     }
 
-    changeQuickAddFilter(e) {
-        const quickAddFilter = e.target.value;
+    changeStateValue(e) {
+        const name = e.target.name;
+        const value = e.target.value;
         this.setState({
-            quickAddFilter: quickAddFilter
-        });
-    }
-
-    changeQuickAddNote(e) {
-        const newNote = e.target.value;
-        this.setState({
-            quickAddNote: newNote
+            [name]: value
         });
     }
 
@@ -170,10 +159,6 @@ class GameNotes extends React.Component {
             oppCharacter: "",
             chosenFilter: ""
         });
-    }
-
-    switchBetweenNotes(e) {
-
     }
 
     pullCharacters(e) {
@@ -292,42 +277,6 @@ class GameNotes extends React.Component {
         }
     }
 
-    getGameNotes(e) {
-        e.preventDefault();
-        const yourGame = this.state.selectedGame;
-        const yourChar = this.state.yourCharacter;
-        const oppChar = this.state.oppCharacter;
-        const you = this.state.userName;
-
-        console.log(yourChar, oppChar, yourGame, you);
-
-        this.dbRefGameNotes = firebase.database().ref(`userData/${you}/gameNotes/${yourGame}/${yourChar}/${oppChar}/`);
-        this.dbRefGameNotes.on("value", snapshot => {
-            const unparsedNotes = snapshot.val();
-            const parsedNotes = [];
-
-            if (snapshot.val()) {
-                for (let item in unparsedNotes) {
-                    unparsedNotes[item].key = item;
-                    parsedNotes.push(unparsedNotes[item]);
-                }
-                this.setState({
-                    gameNotes: parsedNotes,
-                    chosenFilter: ''
-                });
-            } else {
-                parsedNotes.push({
-                    noteLongform: 'Alert',
-                    note: 'You have no notes for this match.'
-                });
-                this.setState({
-                    gameNotes: parsedNotes,
-                    chosenFilter: ''
-                });
-            }
-        });
-    }
-
     removeNote(itemToRemove) {
         const yourGame = this.state.selectedGame;
         const yourChar = this.state.yourCharacter;
@@ -370,20 +319,6 @@ class GameNotes extends React.Component {
                 editNote: noteEdited.note,
                 showEdit: true
             });
-        });
-    }
-
-    changeEditFilter(e) {
-        const newFilter = e.target.value;
-        this.setState({
-            editFilter: newFilter
-        });
-    }
-
-    changeEditNote(e) {
-        const newNote = e.target.value;
-        this.setState({
-            editNote: newNote
         });
     }
 
@@ -489,7 +424,7 @@ class GameNotes extends React.Component {
                                             <li className="note-qa-li">
                                                 <div>
                                                     <span className="note-type quick-add">Quick Add:</span>
-                                                    <select name="note-filter" className="note-filter qa-note-filter" onChange={this.changeQuickAddFilter}>
+                                                    <select name="quickAddFilter" className="note-filter qa-note-filter" onChange={this.changeStateValue} value={this.state.quickAddFilter}>
                                                         <option value="">--Add Filter--</option>
                                                         {this.state.punishData.map((filter, index) => {
                                                             return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
@@ -497,7 +432,7 @@ class GameNotes extends React.Component {
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <textarea name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this matchup here." value={this.state.quickAddNote} cols="2"></textarea>
+                                                    <textarea name="quickAddNote" onChange={this.changeStateValue} placeholder="Write your note for this matchup here." value={this.state.quickAddNote} cols="2"></textarea>
                                                     <a href="#" onClick={this.quickAddNote} className="button"><i className="fas fa-pencil-alt"></i></a>
                                                 </div>
                                             </li> 
@@ -524,14 +459,14 @@ class GameNotes extends React.Component {
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            <span className="note-type">Change Filter:</span> <select name="change-filter" onChange={this.changeEditFilter} value={this.state.editFilter}>
+                            <span className="note-type">Change Filter:</span> <select name="editFilter" onChange={this.changeStateValue} value={this.state.editFilter}>
                                 {this.state.punishData.map((filter, index) => {
                                     return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                 })}
                             </select> 
                         </p>
                         <p><span className="note-type">Change Note:</span></p>
-                        <textarea rows="2" cols="40" onChange={this.changeEditNote} value={this.state.editNote}></textarea>
+                        <textarea rows="2" cols="40" name="editNote" onChange={this.changeStateValue} value={this.state.editNote}></textarea>
                         <a className="button-edit-submit" href="#" onClick={this.postEdit}>Edit Note</a>
                         <a href="#" onClick={this.cancelEdit}>Cancel</a>
                     </Modal.Body>

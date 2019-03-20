@@ -33,12 +33,9 @@ class PlayerNotes extends React.Component {
         this.pullNotes = this.pullNotes.bind(this);
         this.removeNote = this.removeNote.bind(this);
         this.setFilter = this.setFilter.bind(this);
-        this.changeQuickAddFilter = this.changeQuickAddFilter.bind(this);
-        this.changeQuickAddNote = this.changeQuickAddNote.bind(this);
+        this.changeStateValue = this.changeStateValue.bind(this);
         this.quickAddNote = this.quickAddNote.bind(this);
         this.openNoteEditor = this.openNoteEditor.bind(this);
-        this.changeEditFilter = this.changeEditFilter.bind(this);
-        this.changeEditNote = this.changeEditNote.bind(this);
         this.postEdit = this.postEdit.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
         this.resetNotes = this.resetNotes.bind(this);
@@ -173,17 +170,11 @@ class PlayerNotes extends React.Component {
         });
     }
 
-    changeQuickAddFilter(e) {
-        const quickAddFilter = e.target.value;
+    changeStateValue(e) {
+        const name = e.target.name;
+        const value = e.target.value;
         this.setState({
-            quickAddFilter: quickAddFilter
-        });
-    }
-
-    changeQuickAddNote(e) {
-        const newNote = e.target.value;
-        this.setState({
-            quickAddNote: newNote
+            [name]: value
         });
     }
 
@@ -247,20 +238,6 @@ class PlayerNotes extends React.Component {
                 editNote: noteEdited.note,
                 showEdit: true
             });
-        });
-    }
-
-    changeEditFilter(e) {
-        const newFilter = e.target.value;
-        this.setState({
-            editFilter: newFilter
-        });
-    }
-
-    changeEditNote(e) {
-        const newNote = e.target.value;
-        this.setState({
-            editNote: newNote
         });
     }
 
@@ -365,7 +342,7 @@ class PlayerNotes extends React.Component {
                                         <li className="note-qa-li">
                                             <div>
                                                 <span className="note-type quick-add">Quick Add:</span>
-                                                <select name="note-filter" className="note-filter qa-note-filter" onChange={this.changeQuickAddFilter}>
+                                                <select name="quickAddFilter" className="note-filter qa-note-filter" onChange={this.changeStateValue}>
                                                     <option value="">------</option>
                                                     {this.state.filterData.map((filter, index) => {
                                                         return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
@@ -373,7 +350,7 @@ class PlayerNotes extends React.Component {
                                                 </select>
                                             </div>
                                             <div>
-                                                <textarea name="quick-add-note-text" onChange={this.changeQuickAddNote} placeholder="Write your note for this matchup here." value={this.state.quickAddNote} cols="2"></textarea>
+                                                <textarea name="quickAddNote" onChange={this.changeStateValue} placeholder="Write your note for this matchup here." value={this.state.quickAddNote} cols="2"></textarea>
                                                 <a href="#" onClick={this.quickAddNote} className="button"><i className="fas fa-pencil-alt"></i></a>
                                             </div>
                                         </li> : null
@@ -398,14 +375,14 @@ class PlayerNotes extends React.Component {
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            <span className="note-type">Change Filter:</span> <select name="change-filter" onChange={this.changeEditFilter} value={this.state.editFilter}>
+                            <span className="note-type">Change Filter:</span> <select name="editFilter" onChange={this.changeStateValue} value={this.state.editFilter}>
                                 {this.state.filterData.map((filter, index) => {
                                     return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                 })}
                             </select> 
                         </p>
                         <p><span className="note-type">Change Note:</span></p>
-                        <textarea rows="2" cols="40" onChange={this.changeEditNote} value={this.state.editNote}></textarea>
+                        <textarea name="editNote" rows="2" cols="40" onChange={this.changeStateValue} value={this.state.editNote}></textarea>
                         <a className="button-edit-submit" href="#" onClick={this.postEdit}>Edit Note</a>
                         <a href="#" onClick={this.cancelEdit}>Cancel</a>
                     </Modal.Body>
