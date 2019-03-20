@@ -313,6 +313,16 @@ main {
     }
   }
 
+  .selection-head {
+    .add-notes-button-launch {
+      @include button($color-accent, $color-main, $font-second);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      margin-top: 20px;
+      margin-left: 10%;
+    }
+  }
+
   .char-select, .game-select {
     @extend .selection-head;
 

@@ -408,7 +408,7 @@ class GameNotes extends React.Component {
                                         null
                                     }
                                 </section>
-                                <section className="notes-add">
+                                <section className="selection-head">
                                     <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Game</Link>
                                 </section>
                             </div>
@@ -449,7 +449,7 @@ class GameNotes extends React.Component {
                             <h2>It appears that you currently have no notes. Click "Add Notes" below to get started!</h2>
                         </section>
                         <section className="notes-add">
-                        <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Game</Link>
+                            <Link to="/add" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Game</Link>
                         </section>
                     </div>
                 }

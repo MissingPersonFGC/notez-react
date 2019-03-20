@@ -323,8 +323,8 @@ class PlayerNotes extends React.Component {
                                     null
                                 }
                             </section>
-                            <section className="notes-add">
-                                <Link to="/add-player" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add Notes to New Player/Game</Link>
+                            <section className="game-select">
+                                <Link to="/add-player" className="add-notes-button-launch"><i className="fas fa-plus"></i> Add a New Player/Game</Link>
                             </section>
                         </div>
                         <div className="notes">                        
