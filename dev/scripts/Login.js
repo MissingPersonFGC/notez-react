@@ -17,19 +17,14 @@ class Login extends React.Component {
             loggedIn: false
         }
         this.doLogin = this.doLogin.bind(this);
-        this.setEmail = this.setEmail.bind(this);
-        this.setPassword = this.setPassword.bind(this);
+        this.changeStateValue = this.changeStateValue.bind(this);
     }
 
-    setEmail(e) {
+    changeStateValue(e) {
+        const name = e.target.name;
+        const value = e.target.value;
         this.setState({
-            loginEmail: e.target.value
-        });
-    }
-
-    setPassword(e) {
-        this.setState({
-            loginPassword: e.target.value
+            [name]: value
         });
     }
 
@@ -65,10 +60,10 @@ class Login extends React.Component {
                 <div className="user-form">
                     <form className="login-form">
                         <div>
-                            <input type="email" name="email" required placeholder="Email Address" onChange={this.setEmail}/>
+                            <input type="email" name="loginEmail" required placeholder="Email Address" onChange={this.changeStateValue}/>
                         </div>
                         <div>
-                            <input type="password" name="password" required placeholder="Password" onChange={this.setPassword} />
+                            <input type="password" name="loginPassword" required placeholder="Password" onChange={this.changeStateValue} />
                         </div>
                         <div>
                             <input type="submit" name="login" value="Sign-in" onClick={this.doLogin} />

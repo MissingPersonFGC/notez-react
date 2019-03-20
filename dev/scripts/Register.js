@@ -24,9 +24,7 @@ class Register extends React.Component {
 
         this.doRegister = this.doRegister.bind(this);
         this.writeUsername = this.writeUsername.bind(this);
-        this.writeEmail = this.writeEmail.bind(this);
-        this.writePwd = this.writePwd.bind(this);
-        this.writePwdVerify = this.writePwdVerify.bind(this);
+        this.changeStateValue = this.changeStateValue.bind(this);
     }
 
     doRegister(e) {
@@ -110,21 +108,11 @@ class Register extends React.Component {
         });
     }
 
-    writeEmail(e) {
+    changeStateValue(e) {
+        const name = e.target.name;
+        const value = e.target.value;
         this.setState({
-            registerEmail: e.target.value
-        });
-    }
-
-    writePwd(e) {
-        this.setState({
-            registerPwd: e.target.value
-        });
-    }
-
-    writePwdVerify(e) {
-        this.setState({
-            registerPwdVerify: e.target.value
+            [name]: value
         });
     }
 
@@ -145,13 +133,13 @@ class Register extends React.Component {
                             }
                         </div>                        
                         <div>
-                            <input type="email" name="email" placeholder="Email Address" onChange={this.writeEmail} value={this.state.registerEmail} />
+                            <input type="email" name="registerEmail" placeholder="Email Address" onChange={this.changeStateValue} value={this.state.registerEmail} />
                         </div>
                         <div>
-                            <input type="password" name="password" placeholder="Password" onChange={this.writePwd} value={this.state.registerPwd} />
+                            <input type="password" name="registerPwd" placeholder="Password" onChange={this.changeStateValue} value={this.state.registerPwd} />
                         </div>
                         <div>
-                            <input type="password" name="password-verify" placeholder="Verify Password" onChange={this.writePwdVerify} value={this.state.registerPwdVerify} />
+                            <input type="password" name="registerPwdVerify" placeholder="Verify Password" onChange={this.changeStateValue} value={this.state.registerPwdVerify} />
                         </div>
                         <div>
                             <input type="submit" value="Sign-up" onClick={this.doRegister} />
