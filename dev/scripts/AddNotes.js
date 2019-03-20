@@ -24,10 +24,7 @@ class AddNotes extends React.Component {
         }
 
         this.pullCharactersAndFilters = this.pullCharactersAndFilters.bind(this);
-        this.setYourChar = this.setYourChar.bind(this);
-        this.setOppChar = this.setOppChar.bind(this);
-        this.setFilter = this.setFilter.bind(this);
-        this.setNote = this.setNote.bind(this);
+        this.changeStateValue = this.changeStateValue.bind(this);
         this.addNote = this.addNote.bind(this);
     }
 
@@ -100,32 +97,12 @@ class AddNotes extends React.Component {
         });
     }
 
-    setYourChar(e) {
-        const yourChar = e.target.value;
+    changeStateValue(e) {
+        const name = e.target.name;
+        const value = e.target.value;
         this.setState({
-            yourCharacter: yourChar
+            [name]: value
         });
-    }
-
-    setOppChar(e) {
-        const oppChar = e.target.value;
-        this.setState({
-            oppCharacter: oppChar
-        });
-    }
-
-    setFilter(e) {
-        const selectedFilter = e.target.value;
-        this.setState({
-            noteType: selectedFilter
-        });
-    }
-
-    setNote(e) {
-        const note = e.target.value;
-        this.setState({
-            noteContent: note
-        })
     }
 
     addNote(e) {
@@ -170,7 +147,7 @@ class AddNotes extends React.Component {
                 </div>
                 <div className="add-notes-matchup">
                     <h4>Matchup:</h4>
-                    <select className="your-character" name="yourCharacter" onChange={this.setYourChar}>
+                    <select className="your-character" name="yourCharacter" onChange={this.changeStateValue}>
                         <option value="" disabled selected>--Your character--</option>
                         {this.state.characterData.map((character, index) => {
                             return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
@@ -179,7 +156,7 @@ class AddNotes extends React.Component {
 
                     vs.
 
-                    <select className="opp-character" name="opponentCharacter" onChange={this.setOppChar}>
+                    <select className="opp-character" name="oppCharacter" onChange={this.changeStateValue}>
                         <option value="" disabled selected>--Their character--</option>
                         {this.state.characterData.map((character, index) => {
                             return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
@@ -189,7 +166,7 @@ class AddNotes extends React.Component {
                 <div className="add-notes-type">
                     <h4>Type of Note:</h4>
 
-                    <select className="note-type" name="noteType" onChange={this.setFilter}>
+                    <select className="note-type" name="noteType" onChange={this.changeStateValue} value={this.state.noteType}>
                         <option value="" disabled selected>--Note type--</option>
                         {this.state.filterData.map((filter, index) => {
                             return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
@@ -198,7 +175,7 @@ class AddNotes extends React.Component {
                 </div>
                 <div className="add-notes-note">
                     <h4>Note:</h4>
-                    <textarea name="note" rows="2" cols="50" onChange={this.setNote} value={this.state.noteContent}></textarea>
+                    <textarea name="noteContent" rows="2" cols="50" onChange={this.changeStateValue} value={this.state.noteContent}></textarea>
                 </div>
                 <div className="add-notes-submit">
                     <a href="" className="notes-add-submit button" onClick={this.addNote}><i className="far fa-plus-square"></i> Add</a>

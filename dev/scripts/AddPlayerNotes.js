@@ -23,11 +23,8 @@ class AddPlayerNotes extends React.Component {
         }
 
         this.pullGames = this.pullGames.bind(this);
-        this.setFilter = this.setFilter.bind(this);
-        this.setNote = this.setNote.bind(this);
-        this.setGame = this.setGame.bind(this);
+        this.changeStateValue = this.changeStateValue.bind(this);
         this.addNote = this.addNote.bind(this);
-        this.setNewPlayer = this.setNewPlayer.bind(this);
         this.addPlayer = this.addPlayer.bind(this);
     }
 
@@ -79,10 +76,11 @@ class AddPlayerNotes extends React.Component {
         this.unsubscribe();
     }
 
-    setGame(e) {
-        const game = e.target.value;
+    changeStateValue(e) {
+        const name = e.target.name;
+        const value = e.target.value;
         this.setState({
-            yourGame: game
+            [name]: value
         });
     }
 
@@ -106,20 +104,6 @@ class AddPlayerNotes extends React.Component {
                 });
             });
         });
-    }
-
-    setFilter(e) {
-        const selectedFilter = e.target.value;
-        this.setState({
-            noteType: selectedFilter
-        });
-    }
-
-    setNote(e) {
-        const note = e.target.value;
-        this.setState({
-            noteContent: note
-        })
     }
 
     addNote(e) {
@@ -149,13 +133,6 @@ class AddPlayerNotes extends React.Component {
         })
     }
 
-    setNewPlayer(e) {
-        const player = e.target.value;
-        this.setState({
-            newPlayer: player
-        });
-    }
-
     addPlayer(e) {
         e.preventDefault();
         const player = this.state.newPlayer;
@@ -176,18 +153,18 @@ class AddPlayerNotes extends React.Component {
             <div className="add-notes-popup">
                 <div className="add-notes-game">
                     <h4>Opponent:</h4>
-                    <select className="your-game" name="gameShorthand" value={this.state.opponent} onChange={this.pullGames}>
+                    <select className="your-game" name="opponent" value={this.state.opponent} onChange={this.pullGames}>
                         <option value="" disabled>------</option>
                         {this.state.playerData.map((player, index) => {
                             return <PopulatePlayers playerName={player} key={index} />
                         })}
                     </select>
                     <h4>New opponent?</h4>
-                    <input type="text" onChange={this.setNewPlayer} value={this.state.newPlayer}></input> <a href="" className="notes-add-submit button" onClick={this.addPlayer}><i className="far fa-plus-square"></i> Add Player</a>
+                    <input type="text" name="newPlayer" onChange={this.changeStateValue} value={this.state.newPlayer}></input> <a href="" className="notes-add-submit button" onClick={this.addPlayer}><i className="far fa-plus-square"></i> Add Player</a>
                 </div>
                 <div className="add-notes-matchup">
                     <h4>Game:</h4>
-                    <select className="your-character" name="yourCharacter" onChange={this.setGame} value={this.state.yourGame}>
+                    <select className="your-character" name="yourGame" onChange={this.changeStateValue} value={this.state.yourGame}>
                         <option value="" disabled selected>------</option>
                         {this.state.gameData.map((game, index) => {
                             return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
@@ -197,7 +174,7 @@ class AddPlayerNotes extends React.Component {
                 <div className="add-notes-type">
                     <h4>Type of Note:</h4>
 
-                    <select className="note-type"  value={this.state.noteType} name="noteType" onChange={this.setFilter}>
+                    <select className="note-type"  value={this.state.noteType} name="noteType" onChange={this.changeStateValue}>
                         <option value="" disabled selected>------</option>
                         {this.state.filterData.map((filter, index) => {
                             return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
@@ -206,7 +183,7 @@ class AddPlayerNotes extends React.Component {
                 </div>
                 <div className="add-notes-note">
                     <h4>Note:</h4>
-                    <textarea name="note" rows="2" cols="50" onChange={this.setNote} value={this.state.noteContent}></textarea>
+                    <textarea name="noteContent" rows="2" cols="50" onChange={this.changeStateValue} value={this.state.noteContent}></textarea>
                 </div>
                 <div className="add-notes-submit">
                     <a href="" className="notes-add-submit button" onClick={this.addNote}><i className="far fa-plus-square"></i> Add</a>
