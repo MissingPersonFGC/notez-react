@@ -329,7 +329,6 @@ class PlayerNotes extends React.Component {
                         </div>
                         <div className="notes">                        
                             <section className="char-notes">
-                                <ul>
                                     {this.state.playerNotes !== null ? 
                                         this.state.playerNotes.map((note, index) => {
                                             return <PopulateNotes yourCharacter={this.state.userName} oppCharacter={this.state.opponent} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.playerNotes[index].key} 
@@ -339,23 +338,24 @@ class PlayerNotes extends React.Component {
                                         })
                                     : null}
                                     {this.state.playerNotes.length !== 0 ? 
-                                        <li className="note-qa-li">
-                                            <div>
-                                                <span className="note-type quick-add">Quick Add:</span>
-                                                <select name="quickAddFilter" className="note-filter qa-note-filter" onChange={this.changeStateValue}>
-                                                    <option value="">------</option>
-                                                    {this.state.filterData.map((filter, index) => {
-                                                        return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                                    })}
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <textarea name="quickAddNote" onChange={this.changeStateValue} placeholder="Write your note for this matchup here." value={this.state.quickAddNote} cols="2"></textarea>
-                                                <a href="#" onClick={this.quickAddNote} className="button"><i className="fas fa-pencil-alt"></i></a>
-                                            </div>
-                                        </li> : null
+                                        <ul>
+                                            <li className="note-qa-li">
+                                                <div>
+                                                    <span className="note-type quick-add">Quick Add:</span>
+                                                    <select name="quickAddFilter" className="note-filter qa-note-filter" onChange={this.changeStateValue}>
+                                                        <option value="">------</option>
+                                                        {this.state.filterData.map((filter, index) => {
+                                                            return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
+                                                        })}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <textarea name="quickAddNote" onChange={this.changeStateValue} placeholder="Write your note for this matchup here." value={this.state.quickAddNote} cols="2"></textarea>
+                                                    <a href="#" onClick={this.quickAddNote} className="button"><i className="fas fa-pencil-alt"></i></a>
+                                                </div>
+                                            </li> 
+                                        </ul> : null
                                     }
-                                </ul>
                             </section>
                         </div>
                     </div>

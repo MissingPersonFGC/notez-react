@@ -323,6 +323,13 @@ main {
     }
   }
 
+  .note-block {
+    width: 80%;
+  }
+  .edit-block {
+    width: 20%;
+  }
+
   .char-select, .game-select {
     @extend .selection-head;
 
@@ -347,8 +354,34 @@ main {
   }
 }
 
+.notes-grid {
+  display: grid;
+  grid-template-columns: 12% 80% 8%;
+
+  a {
+    color: $color-accent;
+
+    &.button {
+      color: $color-main;
+    }
+  }
+
+  .note-type {
+    color: $color-accent;
+  }
+
+  > a:not(.button) svg {
+    margin-left: 5px;
+    transition: all 0.5s;
+
+    &:hover {
+      color: darken($color-accent, 10);
+    }
+  }
+}
+
 .char-notes {
-  width: 80%;
+  width: 100%;
   max-width: 1250px;
   margin: 0 auto;
 
