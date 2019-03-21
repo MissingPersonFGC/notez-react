@@ -2,11 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import firebase from 'firebase';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import PopulateGames from './PopulateGames'
 import PopulateNotes from './PopulateNotes';
 import PopulateFilters from './PopulateFilters';
 import Modal from 'react-bootstrap/Modal';
 import PopulatePlayers from './PopulatePlayers';
+
+const MySwal = withReactContent(Swal)
 
 class PlayerNotes extends React.Component {
     constructor() {
