@@ -10,7 +10,7 @@ import PopulateFilters from './PopulateFilters';
 import Modal from 'react-bootstrap/Modal';
 import PopulatePlayers from './PopulatePlayers';
 
-const MySwal = withReactContent(Swal)
+
 
 class PlayerNotes extends React.Component {
     constructor() {
@@ -43,6 +43,7 @@ class PlayerNotes extends React.Component {
         this.postEdit = this.postEdit.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
         this.resetNotes = this.resetNotes.bind(this);
+        this.deletionAlert = this.deletionAlert.bind(this);
     }
     
     componentDidMount() {
@@ -87,6 +88,42 @@ class PlayerNotes extends React.Component {
                 }
             });
         });
+    }
+
+    
+
+    deletionAlert(item) {
+        const MySwal = withReactContent(Swal)
+        const itemKey = item;
+        MySwal.fire({
+            title: 'Are you sure you want to delete this note?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            preConfirm: (removeNote) => {
+                this.removeNote(itemKey);
+            },
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+            MySwal.fire({
+                title: 'Deleted!',
+                text: 'Your note has been deleted.',
+                type: 'success',
+            })
+            } else if (
+            // Read more about handling dismissals
+            result.dismiss === Swal.DismissReason.cancel
+            ) {
+            MySwal.fire(
+                'Cancelled',
+                'Your note is still here.',
+                'error'
+            )
+            }
+        })
     }
 
     pullGames(e) {
@@ -336,7 +373,7 @@ class PlayerNotes extends React.Component {
                                     {this.state.playerNotes !== null ? 
                                         this.state.playerNotes.map((note, index) => {
                                             return <PopulateNotes yourCharacter={this.state.userName} oppCharacter={this.state.opponent} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.playerNotes[index].key} 
-                                            removeNote={this.removeNote} 
+                                            removeNote={this.deletionAlert} 
                                             openNoteEditor={this.openNoteEditor} 
                                             itemID={this.state.playerNotes[index].key} />
                                         })

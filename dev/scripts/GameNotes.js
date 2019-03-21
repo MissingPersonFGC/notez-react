@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import firebase from 'firebase';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import PopulateGames from './PopulateGames';
 import PopulateCharacters from './PopulateCharacters';
 import PopulateNotes from './PopulateNotes';
@@ -41,6 +43,7 @@ class GameNotes extends React.Component {
         this.quickAddNote = this.quickAddNote.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
         this.postEdit = this.postEdit.bind(this);
+        this.deletionAlert = this.deletionAlert.bind(this);
     }
 
     componentDidMount() {
@@ -277,6 +280,40 @@ class GameNotes extends React.Component {
         }
     }
 
+    deletionAlert(item) {
+        const MySwal = withReactContent(Swal)
+        const itemKey = item;
+        MySwal.fire({
+            title: 'Are you sure you want to delete this note?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            preConfirm: (removeNote) => {
+                this.removeNote(itemKey);
+            },
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+            MySwal.fire({
+                title: 'Deleted!',
+                text: 'Your note has been deleted.',
+                type: 'success',
+            })
+            } else if (
+            // Read more about handling dismissals
+            result.dismiss === Swal.DismissReason.cancel
+            ) {
+            MySwal.fire(
+                'Cancelled',
+                'Your note is still here.',
+                'error'
+            )
+            }
+        })
+    }
+
     removeNote(itemToRemove) {
         const yourGame = this.state.selectedGame;
         const yourChar = this.state.yourCharacter;
@@ -416,7 +453,7 @@ class GameNotes extends React.Component {
                                 <section className="char-notes">
                                         {this.state.gameNotes !== null ? 
                                             this.state.gameNotes.map((note, index) => {
-                                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.gameNotes[index].key} removeNote={this.removeNote} openNoteEditor={this.openNoteEditor} itemID={this.state.gameNotes[index].key} />
+                                                return <PopulateNotes yourCharacter={this.state.yourCharacter} oppCharacter={this.state.oppCharacter} noteShorthand={note.noteType} noteLong={note.noteLongform} note={note.note} key={this.state.gameNotes[index].key} removeNote={this.deletionAlert} openNoteEditor={this.openNoteEditor} itemID={this.state.gameNotes[index].key} />
                                             })
                                         : null}
                                         {this.state.gameNotes.length !== 0 ? 
