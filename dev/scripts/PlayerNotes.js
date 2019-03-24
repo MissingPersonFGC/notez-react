@@ -212,8 +212,7 @@ class PlayerNotes extends React.Component {
     }
 
     changeStateValue(e) {
-        const name = e.target.name;
-        const value = e.target.value;
+        const { name, value } = e.target;
         this.setState({
             [name]: value
         });

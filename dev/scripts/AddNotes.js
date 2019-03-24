@@ -97,8 +97,7 @@ class AddNotes extends React.Component {
     }
 
     changeStateValue(e) {
-        const name = e.target.name;
-        const value = e.target.value;
+        const { name, value } = e.target.name;
         this.setState({
             [name]: value
         });
