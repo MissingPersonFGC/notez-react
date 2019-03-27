@@ -4,11 +4,10 @@ import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom"
 import firebase from 'firebase';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import PopulateGames from './PopulateGames'
 import PopulateNotes from './PopulateNotes';
 import PopulateFilters from './PopulateFilters';
 import Modal from 'react-bootstrap/Modal';
-import PopulatePlayers from './PopulatePlayers';
+import Select from 'react-select';
 
 
 
@@ -74,15 +73,27 @@ class PlayerNotes extends React.Component {
                         const playerList = []
 
                         for (let name in playersDb) {
-                            playerList.push(name);
+                            playerList.push({
+                                label: name,
+                                value: name
+                            });
                         }
 
                         this.dbRefFilters.on('value', (snapshot) => {
                             const filters = snapshot.val();
+                            const mutatedFilters = [];
+                            filters.map(filter => {
+                                mutatedFilters.push({
+                                    label: filter.noteType,
+                                    value: filter.noteShorthand
+                                })
+                            })
+                            console.log(mutatedFilters)
                             this.setState({
-                                filterData: filters,
+                                filterData: mutatedFilters,
                                 playerData: playerList
                             });
+                            console.log(this.state.filterData);
                         }); 
                     });
                 }
@@ -127,7 +138,7 @@ class PlayerNotes extends React.Component {
     }
 
     pullGames(e) {
-        const chosenPlayer = e.target.value;
+        const chosenPlayer = e.value;
         const user = this.state.userName;
         this.dbRefGamesInNotes = firebase.database().ref(`userData/${user}/playerNotes/${chosenPlayer}/`);
         this.dbRefGamesInNotes.once('value', (snapshot) => {
@@ -143,7 +154,10 @@ class PlayerNotes extends React.Component {
                 gamesInPlayerNotes.forEach((game) => {
                     for (let object in games) {
                         if (games[object].gameShorthand === game) {
-                            availableGames.push(games[object]);
+                            availableGames.push({
+                                label: games[object].gameName,
+                                value: games[object].gameShorthand
+                            });
                         }
                     }
                 });
@@ -165,7 +179,7 @@ class PlayerNotes extends React.Component {
     }
 
     pullNotes(e) {
-        const game = e.target.value;
+        const game = e.value;
         const opponent = this.state.opponent;
         const you = this.state.userName;
 
@@ -197,7 +211,7 @@ class PlayerNotes extends React.Component {
     }
 
     setFilter(e) {
-        const filter = e.target.value;
+        const filter = e.value;
         const wholeNotes = this.state.playerNotes;
         const reducedNotes = [];
         wholeNotes.forEach((note) => {
@@ -329,34 +343,19 @@ class PlayerNotes extends React.Component {
                                 <h2>Select your opponent:</h2>
                             </section>
                             <section className="game-select">
-                                <select defaultValue="" onChange={this.pullGames}>
-                                    <option key="empty" value="" disabled>------</option>
-                                    {this.state.playerData.map((player, index) => {
-                                        return <PopulatePlayers playerName={player} key={index} />
-                                    })}
-                                </select>
+                                <Select options={this.state.playerData} onChange={this.pullGames} />
                             </section>
                             <section className="selection-head">
                                 <h2>Select your game:</h2>
                             </section>
                             <section className="game-select">
-                                <select defaultValue="" onChange={this.pullNotes} value={this.state.selectedGame}>
-                                    <option key="empty" value="" disabled>------</option>
-                                    {this.state.gameData.map((game, index) => {
-                                        return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
-                                    })}
-                                </select>
+                                <Select options={this.state.gameData} onChange={this.pullNotes} />
                             </section>
                             <section className="selection-head">
                                 <h2>Filter notes by:</h2>
                             </section>
                             <section className="game-select">
-                                <select defaultValue="" onChange={this.setFilter}>
-                                    <option key="empty" value="" disabled>------</option>
-                                    {this.state.filterData.map((filter, index) => {
-                                        return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                    })}
-                                </select>
+                                <Select options={this.state.filterData} onChange={this.setFilter} />
                                 {this.state.playerNotes.length > 0 ?
                                     <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                                 :
