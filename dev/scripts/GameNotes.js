@@ -471,12 +471,6 @@ class GameNotes extends React.Component {
                                     <h2>Filter notes by:</h2>
                                 </section>
                                 <section className="game-select">
-                                    {/* <select className="note-filter" name="note-filter" onChange={this.changeFilter} value={this.state.chosenFilter} defaultValue=''>
-                                        <option value="" disabled>------</option>
-                                        {this.state.punishData.map((filter, index) => {
-                                            return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                        })}
-                                    </select> */}
                                     <Select options={this.state.punishData} onChange={this.changeFilter} />
                                     {this.state.gameNotes.length > 0 ? 
                                         <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
@@ -500,12 +494,6 @@ class GameNotes extends React.Component {
                                                 <li className="note-qa-li">
                                                     <div>
                                                         <span className="note-type quick-add">Quick Add:</span>
-                                                        {/* <select name="quickAddFilter" className="note-filter qa-note-filter" onChange={this.changeStateValue} value={this.state.quickAddFilter}>
-                                                            <option value="">--Add Filter--</option>
-                                                            {this.state.punishData.map((filter, index) => {
-                                                                return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                                            })}
-                                                        </select> */}
                                                         <Select options={this.state.punishData} name="quickAddFilter" onChange={this.changeStateValue} />
                                                     </div>
                                                     <div>
@@ -537,11 +525,6 @@ class GameNotes extends React.Component {
                     <Modal.Body>
                         <p>
                             <span className="note-type">Change Filter:</span> 
-                            {/* <select name="editFilter" onChange={this.changeStateValue} value={this.state.editFilter}>
-                                {this.state.punishData.map((filter, index) => {
-                                    return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                                })}
-                            </select>  */}
                             <Select options={this.state.punishData} defaultValue={this.state.initialEditFilter} name="editFilter" onChange={this.changeStateValue} />
                         </p>
                         <p><span className="note-type">Change Note:</span></p>
