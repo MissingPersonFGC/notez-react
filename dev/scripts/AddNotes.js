@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import PopulateGames from './PopulateGames';
 import PopulateCharacters from './PopulateCharacters';
 import PopulateFilters from './PopulateFilters';
+import Select from 'react-select';
 
 class AddNotes extends React.Component {
     constructor() {
@@ -42,17 +43,24 @@ class AddNotes extends React.Component {
                     getUserName = value[user];
                     this.dbRefGames = firebase.database().ref(`gameData/`);
                     this.dbRefGames.once('value', (snapshot2) => {
-                        const unusedGames = snapshot2.val();
+                        const unusedGames = []
+                        snapshot2.val().map(game => {
+                            unusedGames.push({
+                                value: game.gameShorthand,
+                                label: game.gameName
+                            })
+                        });                    
 
                         this.dbRefYourGames = firebase.database().ref(`userData/${getUserName}/gameNotes`)
                         this.dbRefYourGames.once('value', (snapshot3) => {
                             const yourGames = snapshot3.val();
                             for (let game in yourGames) {
                                 const index = unusedGames.findIndex(g => 
-                                    g.gameShorthand == game
+                                    g.value == game
                                 );
                                 unusedGames.splice(index, 1);
                             }
+
                             this.setState({
                                 userName: getUserName,
                                 gameData: unusedGames
@@ -66,7 +74,7 @@ class AddNotes extends React.Component {
 
     pullCharactersAndFilters(e) {
         const yourFilters = [];
-        const selectedGame = e.target.value;
+        const selectedGame = e.value;
         let characterData = [];
         this.dbRefCharacters = firebase.database().ref(`characterData/${selectedGame}/`);
         this.dbRefCharacters.on("value", snapshot => {
@@ -136,12 +144,13 @@ class AddNotes extends React.Component {
             <div className="add-notes-popup">
                 <div className="add-notes-game">
                     <h4>Game:</h4>
-                    <select className="your-game" name="gameShorthand" defaultValue="" onChange={this.pullCharactersAndFilters}>
+                    {/* <select className="your-game" name="gameShorthand" defaultValue="" onChange={this.pullCharactersAndFilters}>
                         <option value="" disabled>--Select your game--</option>
                         {this.state.gameData.map((game, index) => {
                             return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
                         })}
-                    </select>
+                    </select> */}
+                    <Select options={this.state.gameData} onChange={this.pullCharactersAndFilters}></Select>
                 </div>
                 <div className="add-notes-matchup">
                     <h4>Matchup:</h4>
