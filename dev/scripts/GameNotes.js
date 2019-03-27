@@ -9,6 +9,7 @@ import PopulateCharacters from './PopulateCharacters';
 import PopulateNotes from './PopulateNotes';
 import PopulateFilters from './PopulateFilters';
 import Modal from 'react-bootstrap/Modal';
+import Select from 'react-select';
 
 class GameNotes extends React.Component {
     constructor() {
@@ -30,7 +31,9 @@ class GameNotes extends React.Component {
             showEdit: false,
             editKey: '',
             editFilter: '',
-            editNote: ''
+            editNote: '',
+            initialEditFilter: {},
+            wholeNotes: []
         };
         this.doLogout = this.doLogout.bind(this);
         this.pullCharacters = this.pullCharacters.bind(this);
@@ -44,6 +47,7 @@ class GameNotes extends React.Component {
         this.cancelEdit = this.cancelEdit.bind(this);
         this.postEdit = this.postEdit.bind(this);
         this.deletionAlert = this.deletionAlert.bind(this);
+        this.resetNotes = this.resetNotes.bind(this);
     }
 
     componentDidMount() {
@@ -79,11 +83,14 @@ class GameNotes extends React.Component {
                         availableGamesInNotes.forEach((game1) => {
                             allGames.forEach((game2) => {
                                 if (game1 === game2.gameShorthand) {
-                                    availableGames.push(game2);
+                                    availableGames.push({
+                                        value: game2.gameShorthand,
+                                        label: game2.gameName
+                                    });
                                 }
                             })
                         })
-    
+
                         this.setState({
                             gameData: availableGames
                         });
@@ -119,8 +126,8 @@ class GameNotes extends React.Component {
         const user = this.state.userName;
         let filterLong = '';
         this.state.punishData.forEach((filter) => {
-            if (filter.noteShorthand === filterShort) {
-                filterLong = filter.noteType;
+            if (filter.value === filterShort) {
+                filterLong = filter.label;
             }
         });
         const noteFormatted = {
@@ -130,13 +137,36 @@ class GameNotes extends React.Component {
         }
         this.dbRefNotesLocation = firebase.database().ref(`userData/${user}/gameNotes/${game}/${you}/${opponent}/`);
         this.dbRefNotesLocation.push(noteFormatted);
+
         this.setState({
             quickAddNote: ''
         });
     }
 
-    changeStateValue(e) {
-        const { name, value } = e.target;
+    resetNotes(e) {
+        e.preventDefault();
+        const you = this.state.userName;
+        const yourChar = this.state.yourCharacter;
+        const opponent = this.state.oppCharacter;
+        const game = this.state.selectedGame;
+        this.dbRefNotes = firebase.database().ref(`userData/${you}/gameNotes/${game}/${yourChar}/${opponent}/`);
+        this.dbRefNotes.on('value', (snapshot) => {
+            const unparsedNotes = snapshot.val();
+            const parsedNotes = [];
+            for (let item in unparsedNotes) {
+                unparsedNotes[item].key = item;
+                parsedNotes.push(unparsedNotes[item]);
+            }
+            this.setState({
+                gameNotes: parsedNotes,
+                chosenFilter: ''
+            });
+        });
+    }
+
+    changeStateValue(e, a) {
+        const value = e.value || e.target.value;
+        const { name } = a || e.target;
         this.setState({
             [name]: value
         });
@@ -164,13 +194,21 @@ class GameNotes extends React.Component {
     }
 
     pullCharacters(e) {
-        const filterData = []
-        const selectedGame = e.target.value;
+        const filterData = [];
+        const selectedGame = e.value;
         this.dbRefCharacters = firebase.database().ref(`characterData/${selectedGame}/`);
         this.dbRefCharacters.on("value", snapshot => {
+            const characters = snapshot.val()
+            const mutatedCharacters = [];
+            characters.map(character => {
+                mutatedCharacters.push({
+                    value: character.characterShorthand,
+                    label: character.characterName
+                });
+            })
             this.setState({
-                selectedGame: selectedGame,
-                characterData: snapshot.val(),
+                selectedGame,
+                characterData: mutatedCharacters,
                 yourCharacter: '',
                 oppCharacter: '',
                 gameNotes: [],
@@ -181,11 +219,17 @@ class GameNotes extends React.Component {
         this.dbRefFilterGlobal = firebase.database().ref(`punishData/global/`);
         this.dbRefFilterGlobal.on("value", snapshot => {
             snapshot.val().forEach((filter) => {
-                filterData.push(filter);
+                filterData.push({
+                    value: filter.noteShorthand,
+                    label: filter.noteType
+                });
             });
             this.dbRefFilterGameSpecific.on("value", snapshot2 => {
                 snapshot2.val().forEach((filter) => {
-                    filterData.push(filter);
+                    filterData.push({
+                        value: filter.noteShorthand,
+                        label: filter.noteType
+                    });
                 })
                 this.setState({
                     punishData: filterData
@@ -204,7 +248,7 @@ class GameNotes extends React.Component {
     }
 
     setYourChar(e) {
-        const yourChar = e.target.value;
+        const yourChar = e.value;
         const oppChar = this.state.oppCharacter;
         if (yourChar !== '' && oppChar !== '') {
             const you = this.state.userName;
@@ -242,7 +286,7 @@ class GameNotes extends React.Component {
     }
 
     setOppChar(e) {
-        const oppChar = e.target.value;
+        const oppChar = e.value;
         const yourChar = this.state.yourCharacter;
         if (oppChar !== '' && yourChar !== '') {
             const you = this.state.userName;
@@ -325,18 +369,27 @@ class GameNotes extends React.Component {
     }
 
     changeFilter(e) {
-        const selectedFilter = e.target.value;
-        const wholeNotes = this.state.gameNotes;
-        const reducedNotes = [];
-        wholeNotes.forEach((note) => {
-            if (note.noteType === selectedFilter) {
-                reducedNotes.push(note);
-            }
-        });
-        this.setState({
-            gameNotes: reducedNotes,
-            chosenFilter: selectedFilter
-        });
+        
+        if (!e.value) {
+            const {wholeNotes} = this.state;
+            this.setState({
+                gameNotes: wholeNotes
+            });
+        } else {
+            const selectedFilter = e.value;
+            const wholeNotes = this.state.gameNotes;
+            const reducedNotes = [];
+            wholeNotes.forEach((note) => {
+                if (note.noteType === selectedFilter) {
+                    reducedNotes.push(note);
+                }
+            });
+            this.setState({
+                gameNotes: reducedNotes,
+                chosenFilter: selectedFilter,
+                wholeNotes
+            });
+        }
     }
 
     openNoteEditor(key) {
@@ -351,6 +404,10 @@ class GameNotes extends React.Component {
             noteEdited = snapshot.val();
             this.setState({
                 editKey: editKey,
+                initialEditFilter: {
+                    value: noteEdited.noteType,
+                    label: noteEdited.noteLongform
+                },
                 editFilter: noteEdited.noteType,
                 editNote: noteEdited.note,
                 showEdit: true
@@ -369,8 +426,8 @@ class GameNotes extends React.Component {
         const newNote = this.state.editNote;
         let filterLong = '';
         this.state.punishData.forEach((filter) => {
-            if (filter.noteShorthand === filterShort) {
-                filterLong = filter.noteType;
+            if (filter.value === filterShort) {
+                filterLong = filter.label;
             }
         });
         const noteFormatted = {
@@ -399,47 +456,33 @@ class GameNotes extends React.Component {
                                     <h2>Select your game:</h2>
                                 </section>
                                 <section className="game-select">
-                                    <select name="your-game" id="your-game" className="your-game" defaultValue="" onChange={this.pullCharacters}>
-                                        <option key="empty" value="" disabled>------</option>
-                                        {this.state.gameData.map((game, index) => {
-                                            return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
-                                        })}
-                                    </select>
+                                    <Select options={this.state.gameData} onChange={this.pullCharacters} />
                                 </section>
                                 <section className="selection-head">
                                     <h2>Select your character:</h2>
                                 </section>
                                 <section className="game-select">
-                                    <select name="your-character" defaultValue="" value={this.state.yourCharacter} onChange={this.setYourChar}>
-                                        <option value="" disabled>------</option>
-                                        {this.state.characterData.map((character, index) => {
-                                            return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index} />
-                                        })}
-                                    </select>
+                                    <Select options={this.state.characterData} name="yourCharacter" onChange={this.setYourChar} />
                                 </section>
                                 <section className="selection-head">
                                     <h2>Select your opponent:</h2>
                                 </section>
                                 <section className="game-select">
-                                    <select name="opp-character" defaultValue="" value={this.state.oppCharacter} onChange={this.setOppChar}>
-                                        <option value="" disabled>------</option>
-                                        {this.state.characterData.map((character, index) => {
-                                            return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
-                                        })}
-                                    </select>
+                                    <Select options={this.state.characterData} name="oppCharacter" onChange={this.setOppChar} />
                                 </section>
                                 <section className="selection-head">
                                     <h2>Filter notes by:</h2>
                                 </section>
                                 <section className="game-select">
-                                    <select className="note-filter" name="note-filter" onChange={this.changeFilter} value={this.state.chosenFilter} defaultValue=''>
+                                    {/* <select className="note-filter" name="note-filter" onChange={this.changeFilter} value={this.state.chosenFilter} defaultValue=''>
                                         <option value="" disabled>------</option>
                                         {this.state.punishData.map((filter, index) => {
                                             return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                         })}
-                                    </select>
+                                    </select> */}
+                                    <Select options={this.state.punishData} onChange={this.changeFilter} />
                                     {this.state.gameNotes.length > 0 ? 
-                                        <a href="" className="button show-all desktop" onClick={this.getGameNotes}><i className="fas fa-sync-alt"></i> Show All</a>
+                                        <a href="" className="button show-all desktop" onClick={this.resetNotes}><i className="fas fa-sync-alt"></i> Show All</a>
                                     :
                                         null
                                     }
@@ -460,12 +503,13 @@ class GameNotes extends React.Component {
                                                 <li className="note-qa-li">
                                                     <div>
                                                         <span className="note-type quick-add">Quick Add:</span>
-                                                        <select name="quickAddFilter" className="note-filter qa-note-filter" onChange={this.changeStateValue} value={this.state.quickAddFilter}>
+                                                        {/* <select name="quickAddFilter" className="note-filter qa-note-filter" onChange={this.changeStateValue} value={this.state.quickAddFilter}>
                                                             <option value="">--Add Filter--</option>
                                                             {this.state.punishData.map((filter, index) => {
                                                                 return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                                             })}
-                                                        </select>
+                                                        </select> */}
+                                                        <Select options={this.state.punishData} name="quickAddFilter" onChange={this.changeStateValue} />
                                                     </div>
                                                     <div>
                                                         <textarea name="quickAddNote" onChange={this.changeStateValue} placeholder="Write your note for this matchup here." value={this.state.quickAddNote} cols="2"></textarea>
@@ -495,11 +539,13 @@ class GameNotes extends React.Component {
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            <span className="note-type">Change Filter:</span> <select name="editFilter" onChange={this.changeStateValue} value={this.state.editFilter}>
+                            <span className="note-type">Change Filter:</span> 
+                            {/* <select name="editFilter" onChange={this.changeStateValue} value={this.state.editFilter}>
                                 {this.state.punishData.map((filter, index) => {
                                     return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
                                 })}
-                            </select> 
+                            </select>  */}
+                            <Select options={this.state.punishData} defaultValue={this.state.initialEditFilter} name="editFilter" onChange={this.changeStateValue} />
                         </p>
                         <p><span className="note-type">Change Note:</span></p>
                         <textarea rows="2" cols="40" name="editNote" onChange={this.changeStateValue} value={this.state.editNote}></textarea>
