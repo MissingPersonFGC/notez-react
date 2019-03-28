@@ -157,43 +157,18 @@ class AddNotes extends React.Component {
             <div className="add-notes-popup">
                 <div className="add-notes-game">
                     <h4>Game:</h4>
-                    {/* <select className="your-game" name="gameShorthand" defaultValue="" onChange={this.pullCharactersAndFilters}>
-                        <option value="" disabled>--Select your game--</option>
-                        {this.state.gameData.map((game, index) => {
-                            return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
-                        })}
-                    </select> */}
                     <Select options={this.state.gameData} onChange={this.pullCharactersAndFilters}></Select>
                 </div>
                 <div className="add-notes-matchup">
                     <h4>Your character:</h4>
-                    {/* <select className="your-character" name="yourCharacter" onChange={this.changeStateValue}>
-                        <option value="" disabled selected>--Your character--</option>
-                        {this.state.characterData.map((character, index) => {
-                            return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
-                        })}
-                    </select> */}
                     <Select options={this.state.characterData} name="yourCharacter" onChange={this.changeStateValue} />
                 </div>
                 <div className="add-notes-matchup">
                     <h4>Opponent's character:</h4>
-                    {/* <select className="opp-character" name="oppCharacter" onChange={this.changeStateValue}>
-                        <option value="" disabled selected>--Their character--</option>
-                        {this.state.characterData.map((character, index) => {
-                            return <PopulateCharacters characterName={character.characterName} characterShorthand={character.characterShorthand} key={index}/>
-                        })}
-                    </select> */}
                     <Select options={this.state.characterData} name="oppCharacter" onChange={this.changeStateValue} />
                 </div>
                 <div className="add-notes-type">
                     <h4>Type of Note:</h4>
-
-                    {/* <select className="note-type" name="noteType" onChange={this.changeStateValue} value={this.state.noteType}>
-                        <option value="" disabled selected>--Note type--</option>
-                        {this.state.filterData.map((filter, index) => {
-                            return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                        })}
-                    </select> */}
                     <Select options={this.state.filterData} name="noteType" onChange={this.changeStateValue} />
                 </div>
                 <div className="add-notes-note">
