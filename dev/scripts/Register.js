@@ -31,7 +31,7 @@ class Register extends React.Component {
         e.preventDefault();
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         
-        if (this.state.registerUserName !== '' && this.state.invalidUserName !== false) {
+        if (this.state.registerUserName !== '' && this.state.invalidUserName !== true) {
             const userName = this.state.registerUserName;
 
             const verifyEmail = re.test(String(this.state.registerEmail.toLowerCase()));
@@ -100,7 +100,6 @@ class Register extends React.Component {
                     userNameInUse = true;
                 }
             }
-            console.log(userNameInUse);
             this.setState({
                 registerUserName: currentName,
                 invalidUserName: userNameInUse
