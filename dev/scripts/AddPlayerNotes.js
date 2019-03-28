@@ -2,9 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import firebase from 'firebase';
-import PopulateGames from './PopulateGames';
-import PopulatePlayers from './PopulatePlayers';
-import PopulateFilters from './PopulateFilters';
+import Select from 'react-select';
+import CreatableSelect from 'react-select/lib/Creatable';
 
 class AddPlayerNotes extends React.Component {
     constructor() {
@@ -32,8 +31,7 @@ class AddPlayerNotes extends React.Component {
         this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
 
             this.setState({
-                userId: user.uid,
-                loggedIn: true
+                userId: user.uid
             });
 
             this.dbRefUser = firebase.database().ref(`users/${user.uid}`);
@@ -56,13 +54,23 @@ class AddPlayerNotes extends React.Component {
                         const playerList = []
 
                         for (let name in playersDb) {
-                            playerList.push(name);
+                            playerList.push({
+                                label: name,
+                                value: name
+                            });
                         }
 
                         this.dbRefFilters.on('value', (snapshot) => {
                             const filters = snapshot.val();
+                            const mutatedFilters = [];
+                            filters.map(filter => {
+                                mutatedFilters.push({
+                                    label: filter.noteType,
+                                    value: filter.noteShorthand
+                                });
+                            });
                             this.setState({
-                                filterData: filters,
+                                filterData: mutatedFilters,
                                 playerData: playerList
                             });
                         }); 
@@ -76,25 +84,32 @@ class AddPlayerNotes extends React.Component {
         this.unsubscribe();
     }
 
-    changeStateValue(e) {
-        const { name, value } = e.target.name;
+    changeStateValue(e, a) {
+        const value = e.value || e.target.value;
+        const { name } = a || e.target;
         this.setState({
             [name]: value
         });
     }
 
     pullGames(e) {
-        const opponent = e.target.value;
+        const opponent = e.value;
         const you = this.state.userName;
         this.dbRefAllGames = firebase.database().ref('gameData/');
         this.dbRefAllGames.once('value', (snapshot) => {
-            const unusedGames = snapshot.val();
-
+            const unusedGames = []
+            const allGames = snapshot.val();
+            allGames.map(game => {
+                unusedGames.push({
+                    label: game.gameName,
+                    value: game.gameShorthand
+                })
+            })
             this.dbRefPlayersGames = firebase.database().ref(`userData/${you}/playerNotes/${opponent}`);
             this.dbRefPlayersGames.once('value', (snapshot) => {
                 const rawGames = snapshot.val();
                 for (let item in rawGames) {
-                    const index = unusedGames.findIndex(g => g.gameShorthand == item);
+                    const index = unusedGames.findIndex(g => g.value == item);
                     unusedGames.splice(index, 1);
                 }
                 this.setState({
@@ -114,8 +129,8 @@ class AddPlayerNotes extends React.Component {
         const note = this.state.noteContent;
         let filterLong = '';
         this.state.filterData.forEach((theFilters) => {
-            if (theFilters.noteShorthand === filter) {
-                filterLong = theFilters.noteType;
+            if (theFilters.value === filter) {
+                filterLong = theFilters.label;
             } 
         });
         const noteFormatted = {
@@ -152,33 +167,15 @@ class AddPlayerNotes extends React.Component {
             <div className="add-notes-popup">
                 <div className="add-notes-game">
                     <h4>Opponent:</h4>
-                    <select className="your-game" name="opponent" value={this.state.opponent} onChange={this.pullGames}>
-                        <option value="" disabled>------</option>
-                        {this.state.playerData.map((player, index) => {
-                            return <PopulatePlayers playerName={player} key={index} />
-                        })}
-                    </select>
-                    <h4>New opponent?</h4>
-                    <input type="text" name="newPlayer" onChange={this.changeStateValue} value={this.state.newPlayer}></input> <a href="" className="notes-add-submit button" onClick={this.addPlayer}><i className="far fa-plus-square"></i> Add Player</a>
+                    <CreatableSelect options={this.state.playerData} onChange={this.pullGames} onInputChange="this.pullGames" />
                 </div>
                 <div className="add-notes-matchup">
                     <h4>Game:</h4>
-                    <select className="your-character" name="yourGame" onChange={this.changeStateValue} value={this.state.yourGame}>
-                        <option value="" disabled selected>------</option>
-                        {this.state.gameData.map((game, index) => {
-                            return <PopulateGames gameName={game.gameName} gameShorthand={game.gameShorthand} gameKey={index} key={index} />
-                        })}
-                    </select>
+                    <Select name="yourGame" onChange={this.changeStateValue} options={this.state.gameData} />
                 </div>
                 <div className="add-notes-type">
                     <h4>Type of Note:</h4>
-
-                    <select className="note-type"  value={this.state.noteType} name="noteType" onChange={this.changeStateValue}>
-                        <option value="" disabled selected>------</option>
-                        {this.state.filterData.map((filter, index) => {
-                            return <PopulateFilters noteShorthand={filter.noteShorthand} noteType={filter.noteType} key={index}/>
-                        })}
-                    </select>
+                    <Select name="noteType" onChange={this.changeStateValue} options={this.state.filterData} />
                 </div>
                 <div className="add-notes-note">
                     <h4>Note:</h4>
