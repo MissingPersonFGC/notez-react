@@ -109,7 +109,7 @@ class FindNotes extends React.Component {
                     :
                         <header className="main-page-head head">
                             <div className="hero-video">
-                                <video src="video/herovideo.mp4" autoPlay loop></video>
+                                <video src="video/herovideo.mp4" autoPlay loop playsinline></video>
                             </div>
                             <div className="video-tint">
                                 &nbsp;

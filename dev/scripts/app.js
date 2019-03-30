@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import firebase from 'firebase';
-import Footer from './Footer';
 import Register from './Register';
 import Login from './Login';
 import FindNotes from './FindNotes';
@@ -64,7 +63,6 @@ class App extends React.Component {
           <Route exact path="/register" component={Register} />
           <Route exact path="/add" component={AddNotes} />
           <Route exact path="/add-player" component={AddPlayerNotes} />
-          <Footer />
         </div>
       </Router>
     )
